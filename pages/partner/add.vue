@@ -16,7 +16,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Partner Code <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.partnerCode">
+                                      <input ref="partnerCode" class="form-control" type="text" v-model="createData.partnerCode">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -34,7 +34,8 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Join Date </label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.joinDate" placeholder="2021-02-08">
+                                    <date-picker v-model="createData.joinDate"/>
+<!--                                      <input class="form-control" type="text" v-model="createData.joinDate" placeholder="2021-02-08">-->
                                   </div>
                               </div>
                               <div class="form-group">
@@ -48,7 +49,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Partner Name <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.partnerName">
+                                      <input ref="partnerName" class="form-control" type="text" v-model="createData.partnerName">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -69,7 +70,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Expire Date</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" placeholder="2021-02-08" v-model="createData.expireDate">
+                                    <date-picker v-model="createData.expireDate"/>
                                   </div>
                               </div>
                           </div>
@@ -81,19 +82,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Wallet ID <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.walletId">
+                                      <input ref="walletId" class="form-control" type="text" v-model="createData.walletId">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Minimum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.minAmtTransaction">
+                                      <input ref="minAmtTransaction" class="form-control" type="text" v-model="createData.minAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Limit tran/Per Days<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.limitTransaction">
+                                      <input ref="limitTransaction" class="form-control" type="text" v-model="createData.limitTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -107,19 +108,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Wallet Amount<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.walletAmount">
+                                      <input ref="walletAmount" class="form-control" type="text" v-model="createData.walletAmount">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Maximum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.maxAmtTransaction">
+                                      <input ref="maxAmtTransaction" class="form-control" type="text" v-model="createData.maxAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Fee Amt<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.fee">
+                                      <input ref="fee" class="form-control" type="text" v-model="createData.fee">
                                   </div>
                               </div>
                           </div>
@@ -131,19 +132,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-2">Secret Key<font style="color: red">*</font></label>
                                   <div class="col-md-10">
-                                      <input class="form-control" type="text" v-model="createData.secretKey">
+                                      <input ref="secretKey" class="form-control" type="text" v-model="createData.secretKey">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-2">Username<font style="color: red">*</font></label>
                                   <div class="col-md-10">
-                                      <input class="form-control" type="text" v-model="createData.username">
+                                      <input ref="username" class="form-control" type="text" v-model="createData.username">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-2">Password<font style="color: red">*</font></label>
                                   <div class="col-md-10">
-                                      <input class="form-control" type="password" v-model="createData.password" >
+                                      <input ref="password" class="form-control" type="password" v-model="createData.password" >
                                   </div>
                               </div>
                           </div>
@@ -169,10 +170,14 @@
 </template>
 <script>
   import axios from 'axios'
+  import {authHeader} from "@/helper/auth-header";
   export default {
+      components: {
+      },
       data () {
           return {
               partners: [],
+              errors:[],
               createData: {
                 partnerCode: "",
                 partnerName: "",
@@ -196,22 +201,72 @@
               }
           }
       },
-      components: {
-      },
       computed: {
-          bearer () {
-              return this.$nuxt.$store.state.bearer
-          }
+
       },
       methods: {
+        validate() {
+          this.errors = [];
+          if (!this.createData.partnerCode) {
+            this.$refs.partnerCode.focus()
+            return false
+          }
+          if (!this.createData.partnerName) {
+            this.$refs.partnerName.focus()
+            return false
+          }
+          if (!this.createData.walletId) {
+            this.$refs.walletId.focus()
+            return false
+          }
+          if (!this.createData.walletAmount) {
+            this.$refs.walletAmount.focus()
+            return false
+          }
+          if (!this.createData.minAmtTransaction) {
+            this.$refs.minAmtTransaction.focus()
+            return false
+          }
+          if (!this.createData.maxAmtTransaction) {
+            this.$refs.maxAmtTransaction.focus()
+            return false
+          }
+          if (!this.createData.limitTransaction) {
+            this.$refs.limitTransaction.focus()
+            return false
+          }
+          if (!this.createData.fee) {
+            this.$refs.fee.focus()
+            return false
+          }
+          if (!this.createData.secretKey) {
+            this.$refs.secretKey.focus()
+            return false
+          }
+          if (!this.createData.username) {
+            this.$refs.username.focus()
+            return false
+          }
+          if (!this.createData.password) {
+            this.$refs.password.focus()
+            return false
+          }
+
+         return true
+
+        },
         async onCreate () {
+          if(!this.validate()){
+            console.log()
+            return false;
+          }
           await axios({
             method: 'post',
             url: this.$nuxt.$store.state.apipath+'partners',
-            headers: { Authorization: this.bearer },
+            headers: authHeader(),
             data: this.createData
           }).then(response => {
-            if(response.data.type == "success") {
+            if(response.data.type === "success") {
               this.$nuxt.$store.dispatch('get_partners')
               this.$router.replace('/partner')
             } else {

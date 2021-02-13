@@ -13,17 +13,27 @@
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/style-resources": "^1.0.0",
     "axios": "^0.21.1",
+    "bootstrap-vue": "^2.21.2",
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.8.2",
     "fibers": "^5.0.0",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
-    "less-loader": "^7.3.0",
-    "nuxt": "^2.14.12"
+    "less": "^4.1.1",
+    "nuxt": "^2.14.12",
+    "vee-validate": "^3.4.5",
+    "vue": "^2.6.12",
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-mobile-detection": "^1.0.0",
+    "vue2-datepicker": "^3.9.0",
+    "vuejs-datepicker": "^1.6.2",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3",
+    "less-loader": "^7.3.0",
     "sass": "^1.32.5",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "webpack": "^4.46.0"
   }
 }

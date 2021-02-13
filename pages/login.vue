@@ -67,11 +67,22 @@
     layout: 'login',
     data () {
       return {
+        token: '',
         user: '',
         password: ''
       }
     },
     methods: {
+      async Me(){
+        await axios({
+          method: 'GET',
+          url: this.$nuxt.$store.state.apipath+'users/profile',
+          headers: { Authorization: 'Bearer '+this.token }
+        }).then(res =>{
+          console.log(res.data.data)
+          localStorage.setItem('users',JSON.stringify(res.data.data.profile))
+        })
+      },
       async onLogin () {
         if (this.user == '' || this.password == '') {
           this.$nuxt.$store.commit('SET_ALERT',{
@@ -89,9 +100,11 @@
                 type: 'correct',
                 direct: '/'
               })
-              this.$nuxt.$store.commit('SET_USER',{
+              this.$nuxt.$store.commit('SET_TOKEN',{
                 token: res.data.data.token
               })
+              this.token = res.data.data.token;
+              this.Me()
             } else {
               this.$nuxt.$store.commit('SET_ALERT',{
                 text: 'Login Fail',

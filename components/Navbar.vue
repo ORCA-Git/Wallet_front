@@ -23,13 +23,13 @@
                     </form>
                 </li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="~/assets/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">ORCA</b><span class="caret"></span> </a>
+                    <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="~/assets/images/users/default-avatar.png" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">{{this.userName}}</b><span class="caret"></span> </a>
                     <ul class="dropdown-menu dropdown-user animated flipInY">
                         <li>
                             <div class="dw-user-box">
                                 <div class="u-img"><img src="~/assets/images/users/varun.jpg" alt="user" /></div>
                                 <div class="u-text">
-                                    <h4>Orca Company</h4>
+                                    <h4>{{this.userName}}</h4>
                                     <p class="text-muted">orca@gmail.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
                                 </div>
                             </div>
@@ -53,9 +53,12 @@ import Sidebar from '~/components/Sidebar.vue'
 export default {
   data () {
     return {
+      userName: "TEST",
     }
   },
-  mounted () {
+  created() {
+    const user = JSON.parse(localStorage.getItem('users'))
+    this.userName = user.employeeName
   },
   methods: {
     onExpand () {

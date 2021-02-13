@@ -61,11 +61,13 @@
 </template>
 <script>
     import axios from 'axios'
+
+
     export default {
         data () {
             return {
                 partners: [],
-                token: this.$nuxt.$store.state.token
+                token: localStorage.getItem('token'),
             }
         },
         components: {
@@ -76,11 +78,13 @@
             }
         },
         async mounted () {
+
             let urlapi = 'http://13.228.120.202:80/api/v1/partners'
             axios.get(urlapi, { headers: { Authorization: this.bearer } }).then(response => {
                 console.log(response.data.data)
                 this.partners = response.data.data.result
             }).catch((error) => {
+              console.log("NITT")
                 console.log(error);
             })
         }

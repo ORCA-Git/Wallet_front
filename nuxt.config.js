@@ -1,9 +1,9 @@
-import colors from 'vuetify/es5/util/colors'
 const webpack = require('webpack')
 
 export default {
   //mode: 'universal',
-  loader: 'less-loader', options: { math: { 'parens-division': true, } },
+  loader: 'less-loader',
+  options: { math: { 'parens-division': true, } },
   //mode: 'spa',
   ssr: false,
   loading: true,
@@ -26,7 +26,12 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { href: "https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css", integrity:"sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu", crossorigin:"anonymous" , rel: "stylesheet" },
+      {
+        href: "https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css",
+        integrity:"sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu",
+        crossorigin:"anonymous" ,
+        rel: "stylesheet"
+      },
       { href: "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css", rel:"stylesheet" },
       { href: "https://data.jsdelivr.com/v1/package/npm/@icon/themify-icons/badge" },
       { href: "https://www.jsdelivr.com/package/npm/@icon/themify-icons" },
@@ -41,7 +46,8 @@ export default {
     '~/assets/css/colors/blue-dark.css'
   ],
   plugins: [
-    { src: './plugins/jquery.min.js', ssr: false }
+    { src: './plugins/jquery.min.js', ssr: false },
+    { src: '~/plugins/vue-datepicker', ssr: false }
   ],
   components: true,
   buildModules: [
@@ -59,13 +65,12 @@ export default {
     credentials: false
   },
   build: {
+    transpile: ["vee-validate/dist/rules"],
     vendor: ['jquery'],
     plugins: [
       new webpack.ProvidePlugin({
         '$': 'jquery'
       })
     ]
-  },
-  build: {
   }
 }
