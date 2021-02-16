@@ -62,67 +62,67 @@
     </div>
 </template>
 <script>
-  import axios from 'axios'
-  export default {
-    layout: 'login',
-    data () {
-      return {
-        token: '',
-        user: '',
-        password: ''
-      }
+import axios from 'axios'
+export default {
+  layout: 'login',
+  data () {
+    return {
+      token: '',
+      user: '',
+      password: ''
+    }
+  },
+  methods: {
+    async Me(){
+      await axios({
+        method: 'GET',
+        url: this.$nuxt.$store.state.apipath+'users/profile',
+        headers: { Authorization: 'Bearer '+this.token }
+      }).then(res =>{
+        console.log(res.data.data)
+        localStorage.setItem('users',JSON.stringify(res.data.data.profile))
+      })
     },
-    methods: {
-      async Me(){
-        await axios({
-          method: 'GET',
-          url: this.$nuxt.$store.state.apipath+'users/profile',
-          headers: { Authorization: 'Bearer '+this.token }
-        }).then(res =>{
-          console.log(res.data.data)
-          localStorage.setItem('users',JSON.stringify(res.data.data.profile))
+    async onLogin () {
+      if (this.user == '' || this.password == '') {
+        this.$nuxt.$store.commit('SET_ALERT',{
+          text: 'Field Login Missing',
+          type: 'error'
         })
-      },
-      async onLogin () {
-        if (this.user == '' || this.password == '') {
-          this.$nuxt.$store.commit('SET_ALERT',{
-            text: 'Field Login Missing',
-            type: 'error'
-          })
-        } else {
-          await axios.post(this.$nuxt.$store.state.apipath+'login',{
-            username: this.user,
-            password: this.password
-          }).then(res => {
-            if (res.data.type == 'success') {
-              this.$nuxt.$store.commit('SET_ALERT',{
-                text: 'Login Successful',
-                type: 'correct',
-                direct: '/'
-              })
-              this.$nuxt.$store.commit('SET_TOKEN',{
-                token: res.data.data.token
-              })
-              this.token = res.data.data.token;
-              this.Me()
-            } else {
-              this.$nuxt.$store.commit('SET_ALERT',{
-                text: 'Login Fail',
-                type: 'error'
-              })
-            }
-          }).catch(err => {
+      } else {
+        await axios.post(this.$nuxt.$store.state.apipath+'login',{
+          username: this.user,
+          password: this.password
+        }).then(res => {
+          if (res.data.type == 'success') {
+            this.$nuxt.$store.commit('SET_ALERT',{
+              text: 'Login Successful',
+              type: 'correct',
+              direct: '/'
+            })
+            this.$nuxt.$store.commit('SET_TOKEN',{
+              token: res.data.data.token
+            })
+            this.token = res.data.data.token;
+            this.Me()
+          } else {
             this.$nuxt.$store.commit('SET_ALERT',{
               text: 'Login Fail',
               type: 'error'
             })
+          }
+        }).catch(err => {
+          this.$nuxt.$store.commit('SET_ALERT',{
+            text: 'Login Fail',
+            type: 'error'
           })
-        }
+        })
       }
-    },
-    components: {
     }
+  },
+  components: {
   }
+}
 </script>
 
 <style lang="less">

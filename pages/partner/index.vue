@@ -91,18 +91,24 @@
               </tr>
               </tbody>
             </table>
-            <div class="">
-              <p class="card-category">
-                Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-              </p>
+            <div class="col-md-12">
+              <div class="col-md-6">
+                <p class="pagination">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <div class="col-md-6">
+                <div class="pull-right">
+                  <base-pagination
+                    v-model="pagination.currentPage"
+                    :per-page="pagination.perPage"
+                    :total="total">
+                  </base-pagination>
+                </div>
+              </div>
             </div>
-            <base-pagination
-              class="pagination-no-border"
-              v-model="pagination.currentPage"
-              :per-page="pagination.perPage"
-              :total="total"
-            >
-            </base-pagination>
+
+
           </div>
 
         </div>

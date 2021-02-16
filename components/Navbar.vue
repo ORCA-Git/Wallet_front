@@ -58,7 +58,9 @@ export default {
   },
   created() {
     const user = JSON.parse(localStorage.getItem('users'))
-    this.userName = user.employeeName
+    if(user){
+      this.userName = user.employeeName
+    }
   },
   methods: {
     onExpand () {

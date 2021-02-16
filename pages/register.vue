@@ -61,7 +61,7 @@
 </template>
 <script>
   export default {
-    layout: 'login',
+    layout: 'register',
     data () {
       return {
         user: '',
