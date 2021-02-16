@@ -50,6 +50,7 @@ export const mutations = {
     state.userlogin = []
   },
   SET_PARTNERS (state, data) {
+    console.log(data)
     state.partners = data
   },
   SET_TRANSFERS (state, data) {
@@ -83,7 +84,7 @@ export const actions = {
   async get_wallets({ commit, state }) {
     await axios.get(state.apipath + 'wallets', { headers: authHeader() })
       .then(response => {
-        commit('SET_WALLETS', response.data.data.result)
+        commit('SET_WALLETS', response.data.data.walletUser)
       }).catch(error => {
       })
   },

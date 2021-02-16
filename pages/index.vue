@@ -131,7 +131,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <tr v-for="transfer,index in transfers">
+                              <tr v-for="transfer in transfers">
                                   <td>{{ index + 1 }}</td>
                                   <td class="txt-oflo">{{ getPartnerName(transfer.from_partner) }}</td>
                                   <td><span class="label label-success label-rouded">Approved</span> </td>
@@ -290,9 +290,6 @@
       partners () {
         return this.$nuxt.$store.state.partners
       },
-      wallets () {
-        return this.$nuxt.$store.state.partners.walletUser
-      },
       partnerCount () {
         return this.$nuxt.$store.state.partners.length
       },
@@ -311,8 +308,8 @@
         let wallets = this.$nuxt.$store.state.wallets
         let fee = 0;
         if (wallets) {
-          for (var i = 0; i < wallets.length; i++) {
-            fee = fee + wallet[i].amount
+          for (let i = 0; i < wallets.length; i++) {
+            fee = fee + wallets[i].amount
           }
         }
         return fee

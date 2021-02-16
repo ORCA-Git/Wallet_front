@@ -12,7 +12,6 @@
 <script>
 import Modalalert from '~/components/Modalalert.vue'
 export default {
-  middleware: ['userlogedin'],
   data () {
     return {
     }

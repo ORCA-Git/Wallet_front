@@ -120,7 +120,6 @@ export default {
   },
   watch: {
     activities(val) {
-      console.log(val)
       this.tableData = val
     },
     searchQuery(value) {
