@@ -34,7 +34,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Join Date </label>
                                   <div class="col-md-8">
-                                    <date-picker v-model="createData.joinDate"/>
+                                    <date-picker input-class="form-control" v-model="createData.joinDate"/>
 <!--                                      <input class="form-control" type="text" v-model="createData.joinDate" placeholder="2021-02-08">-->
                                   </div>
                               </div>
@@ -64,13 +64,16 @@
                                       <select class="form-control" v-model="createData.country">
                                           <option>-- Please choose country --</option>
                                           <option>Thailand</option>
+                                          <option>Singapore</option>
+                                          <option>Malaysia</option>
+                                          <option>Indonesia</option>
                                       </select>
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Expire Date</label>
                                   <div class="col-md-8">
-                                    <date-picker v-model="createData.expireDate"/>
+                                    <date-picker input-class="form-control" v-model="createData.expireDate"/>
                                   </div>
                               </div>
                           </div>
@@ -88,13 +91,13 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Minimum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input ref="minAmtTransaction" class="form-control" type="text" v-model="createData.minAmtTransaction">
+                                      <input ref="minAmtTransaction" class="form-control" type="number" v-model="createData.minAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Limit tran/Per Days<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input ref="limitTransaction" class="form-control" type="text" v-model="createData.limitTransaction">
+                                      <input ref="limitTransaction" class="form-control" type="number" v-model="createData.limitTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -108,19 +111,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Wallet Amount<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input ref="walletAmount" class="form-control" type="text" v-model="createData.walletAmount">
+                                      <input ref="walletAmount" class="form-control" type="number" v-model="createData.walletAmount">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Maximum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input ref="maxAmtTransaction" class="form-control" type="text" v-model="createData.maxAmtTransaction">
+                                      <input ref="maxAmtTransaction" class="form-control" type="number" v-model="createData.maxAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Fee Amt<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input ref="fee" class="form-control" type="text" v-model="createData.fee">
+                                      <input ref="fee" class="form-control" type="number" v-model="createData.fee">
                                   </div>
                               </div>
                           </div>
@@ -257,7 +260,6 @@
         },
         async onCreate () {
           if(!this.validate()){
-            console.log()
             return false;
           }
           await axios({
@@ -271,13 +273,14 @@
               this.$router.replace('/partner')
             } else {
               this.$nuxt.$store.commit('SET_ALERT',{
-                text: 'Add Partner Failed',
+                text: 'Fail to Add partner',
                 type: 'error'
               })
             }
           }).catch(err => {
+            console.log(err.response.data.message);
             this.$nuxt.$store.commit('SET_ALERT',{
-              text: 'Add Partner Failed',
+              text: err.response.data.message,
               type: 'error'
             })
           })

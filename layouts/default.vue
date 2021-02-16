@@ -25,6 +25,7 @@ export default {
     this.$nuxt.$store.dispatch('get_partners')
     this.$nuxt.$store.dispatch('get_transfers')
     this.$nuxt.$store.dispatch('get_wallets')
+    this.$nuxt.$store.dispatch('get_activity_log')
   },
   components: {
     Navbar, Sidebar, Modalalert

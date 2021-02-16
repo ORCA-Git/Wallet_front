@@ -7,13 +7,14 @@ export const state = () => ({
     user: null
   },
   apipath:'http://13.228.120.202:3000/api/v1/',
-  //apipath: 'http://localhost/api/v1/',//'http://13.228.120.202:80/api/v1/',
+  //apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
   bearer: '',
   expandsidebar: true,
   partners: [],
   userlogin: [],
   transfers: [],
   wallets: [],
+  activities: [],
   token: "",
   alertmodal: ""
 })
@@ -57,6 +58,9 @@ export const mutations = {
   ,
   SET_WALLETS (state, data) {
     state.wallets = data
+  },
+  SET_ACTIVITIES (state ,data) {
+    state.activities = data
   }
 }
 
@@ -80,6 +84,13 @@ export const actions = {
     await axios.get(state.apipath + 'wallets', { headers: authHeader() })
       .then(response => {
         commit('SET_WALLETS', response.data.data.result)
+      }).catch(error => {
+      })
+  },
+  async get_activity_log({ commit, state }) {
+    await axios.get(state.apipath + 'activity', { headers: authHeader() })
+      .then(response => {
+        commit('SET_ACTIVITIES', response.data.data.result)
       }).catch(error => {
       })
   }

@@ -16,7 +16,9 @@
     "bootstrap-vue": "^2.21.2",
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.8.2",
+    "element-ui": "^2.15.0",
     "fibers": "^5.0.0",
+    "fuse.js": "^6.4.6",
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "less": "^4.1.1",
@@ -26,8 +28,7 @@
     "vue-awesome-swiper": "^4.1.1",
     "vue-mobile-detection": "^1.0.0",
     "vue2-datepicker": "^3.9.0",
-    "vuejs-datepicker": "^1.6.2",
-    "vuelidate": "^0.7.6"
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.3",

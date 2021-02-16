@@ -16,7 +16,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Partner Code <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.partnerCode">
+                                      <input ref="partnerCode" class="form-control" type="text" v-model="createData.partnerCode">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -34,13 +34,13 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Join Date </label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.joinDate" placeholder="2021-02-08">
+                                    <date-picker input-class="form-control" v-model="createData.joinDate" :value="createData.joinDate"></date-picker>
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Address </label>
                                   <div class="col-md-8">
-                                      <textarea rows="4" class="form-control" type="text" v-model="createData.address"></textarea>
+                                      <textarea rows="4" class="form-control" type="text" v-model="createData.Address"> </textarea>
                                   </div>
                               </div>
                           </div>
@@ -48,7 +48,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Partner Name <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.partnerName">
+                                      <input ref="partnerName" class="form-control" type="text" v-model="createData.partnerName">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -69,7 +69,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Expire Date</label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" placeholder="2021-02-08" v-model="createData.expireDate">
+                                    <date-picker input-class="form-control" v-model="createData.expireDate" :value="createData.expireDate" />
                                   </div>
                               </div>
                           </div>
@@ -81,19 +81,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Wallet ID <font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.walletId">
+                                      <input ref="walletId" class="form-control" type="text" v-model="createData.walletId">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Minimum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.minAmtTransaction">
+                                      <input ref="minAmtTransaction" class="form-control" type="number" v-model="createData.minAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Limit tran/Per Days<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.limitTransaction">
+                                      <input ref="limitTransaction" class="form-control" type="number" v-model="createData.limitTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -107,19 +107,19 @@
                               <div class="form-group">
                                   <label class="control-label col-md-4">Wallet Amount<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.walletAmount">
+                                      <input ref="walletAmount" class="form-control" type="number" v-model="createData.walletAmount">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Maximum Amt/Per. Transaction<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.maxAmtTransaction">
+                                      <input ref="maxAmtTransaction" class="form-control" type="number" v-model="createData.maxAmtTransaction">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label class="control-label col-md-4">Fee Amt<font style="color: red">*</font></label>
                                   <div class="col-md-8">
-                                      <input class="form-control" type="text" v-model="createData.fee">
+                                      <input ref="fee" class="form-control" type="number" v-model="createData.fee">
                                   </div>
                               </div>
                           </div>
@@ -169,6 +169,7 @@
 </template>
 <script>
   import axios from 'axios'
+  import {authHeader} from "@/helper/auth-header";
   export default {
       data () {
           return {
@@ -183,7 +184,7 @@
                 country: "",
                 joinDate: "",
                 expireDate: "",
-                address: "",
+                Address: "",
                 remark: "",
                 walletAmount: "",
                 walletId: "",
@@ -200,58 +201,96 @@
       components: {
       },
       computed: {
-          bearer () {
-              return this.$nuxt.$store.state.bearer
-          }
       },
       async mounted () {
         await axios.get(this.$nuxt.$store.state.apipath + 'partners/' + this.paramId,
-        { headers: { Authorization: this.$nuxt.$store.state.bearer } })
+        { headers: authHeader() })
         .then(response => {
-          console.log(response)
-          this.createData.partnerCode = response.data.data.result.code
-          this.createData.partnerName = response.data.data.result.partnerName
-          this.createData.contactName = response.data.data.result.contactName
-          this.createData.email = response.data.data.result.email
-          this.createData.tel = response.data.data.result.tel
-          this.createData.country = response.data.data.result.country
-          this.createData.joinDate = response.data.data.result.joinDate
-          this.createData.expireDate = response.data.data.result.expireDate
-          this.createData.address = response.data.data.result.address
-          this.createData.remark = response.data.data.result.remark
-          this.createData.walletAmount = response.data.data.result.walletAmount
-          this.createData.walletId = response.data.data.result.walletId
-          this.createData.minAmtTransaction = response.data.data.result.minAmtTransaction
-          this.createData.maxAmtTransaction = response.data.data.result.maxAmtTransaction
-          this.createData.limitTransaction = response.data.data.result.limitTransaction
-          this.createData.fee = response.data.data.result.fee
-          this.createData.username = response.data.data.result.username
-          this.createData.password = response.data.data.result.password
-          this.createData.secretKey = response.data.data.result.secretKey
+          this.createData.partnerCode = response.data.data.partner.code
+          this.createData.partnerName = response.data.data.partner.partnerName
+          this.createData.contactName = response.data.data.partner.contactName
+          this.createData.email = response.data.data.partner.email
+          this.createData.tel = response.data.data.partner.tel
+          this.createData.country = response.data.data.partner.country
+          this.createData.joinDate = new Date(response.data.data.partner.joinDate)
+          this.createData.expireDate = new Date(response.data.data.partner.expireDate)
+          this.createData.Address = response.data.data.partner.uAddress
+          this.createData.remark = response.data.data.partner.remark
+          this.createData.walletAmount = response.data.data.wallet.amount
+          this.createData.walletId = response.data.data.wallet.walletId
+          this.createData.minAmtTransaction = response.data.data.wallet.minTransaction
+          this.createData.maxAmtTransaction = response.data.data.wallet.maxTransaction
+          this.createData.limitTransaction = response.data.data.wallet.limitTransactionPerDay
+          this.createData.fee = response.data.data.wallet.fee
+          this.createData.remark = response.data.data.wallet.remark
+          this.createData.username = response.data.data.partner.username
+          this.createData.password = response.data.data.partner.password
+          this.createData.secretKey = response.data.data.partner.secretKey
         }).catch(error => {
         })
       },
       methods: {
+        validate() {
+          this.errors = [];
+          if (!this.createData.partnerCode) {
+            this.$refs.partnerCode.focus()
+            return false
+          }
+          if (!this.createData.partnerName) {
+            this.$refs.partnerName.focus()
+            return false
+          }
+          if (!this.createData.walletId) {
+            this.$refs.walletId.focus()
+            return false
+          }
+          if (!this.createData.walletAmount) {
+            this.$refs.walletAmount.focus()
+            return false
+          }
+          if (!this.createData.minAmtTransaction) {
+            this.$refs.minAmtTransaction.focus()
+            return false
+          }
+          if (!this.createData.maxAmtTransaction) {
+            this.$refs.maxAmtTransaction.focus()
+            return false
+          }
+          if (!this.createData.limitTransaction) {
+            this.$refs.limitTransaction.focus()
+            return false
+          }
+          if (!this.createData.fee) {
+            this.$refs.fee.focus()
+            return false
+          }
+          if (!this.createData.secretKey) {
+            this.$refs.secretKey.focus()
+            return false
+          }
+          if (!this.createData.username) {
+            this.$refs.username.focus()
+            return false
+          }
+          if (!this.createData.password) {
+            this.$refs.password.focus()
+            return false
+          }
+
+          return true
+
+        },
         async onCreate () {
+          if(!this.validate()){
+            return false;
+          }
           await axios({
             method: 'put',
             url: this.$nuxt.$store.state.apipath+'partners/' + this.paramId,
-            headers: { Authorization: this.bearer },
-            data: {
-                partnerCode: this.createData.partnerCode,
-                partnerName: this.createData.partnerName,
-                contactName: this.createData.contactName,
-                email: this.createData.email,
-                tel: this.createData.tel,
-                country: this.createData.country,
-                joinDate: this.createData.joinDate,
-                expireDate: this.createData.expireDate,
-                address: this.createData.address,
-                remark: this.createData.remark
-            }
+            headers: authHeader(),
+            data: this.createData
           }).then(response => {
-            console.log(response)
-            if(response.data.type == "success") {
+            if(response.data.type === "success") {
               this.$nuxt.$store.dispatch('get_partners')
               this.$router.replace('/partner')
             } else {

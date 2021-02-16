@@ -68,7 +68,7 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/logs" class="waves-effect" v-show="false">
+          <NuxtLink to="/logs" class="waves-effect" v-bind:class="{ 'active': $nuxt.$route.name === 'logs' }" >
             <i class="las la-sign-in-alt"></i>
             <span class="hide-menu">Activity Log</span>
           </NuxtLink>
