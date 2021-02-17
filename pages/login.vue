@@ -79,7 +79,6 @@
           url: this.$nuxt.$store.state.apipath+'users/profile',
           headers: { Authorization: 'Bearer '+this.token }
         }).then(res =>{
-          console.log(res.data.data)
           localStorage.setItem('users',JSON.stringify(res.data.data.profile))
         })
       },

@@ -6,14 +6,15 @@ export const state = () => ({
     loggedIn: false,
     user: null
   },
-  //apipath:'http://13.228.120.202:3000/api/v1/',
-  apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
+  apipath:'http://13.228.120.202:3000/api/v1/',
+  //apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
   bearer: '',
   expandsidebar: true,
   partners: [],
   userlogin: [],
   transfers: [],
   wallets: [],
+  walletsHistory: [],
   activities: [],
   token: "",
   alertmodal: ""
@@ -50,7 +51,6 @@ export const mutations = {
     state.userlogin = []
   },
   SET_PARTNERS (state, data) {
-    console.log(data)
     state.partners = data
   },
   SET_TRANSFERS (state, data) {
@@ -62,6 +62,9 @@ export const mutations = {
   },
   SET_ACTIVITIES (state ,data) {
     state.activities = data
+  },
+  SET_WALLET_HISTORY (state ,data){
+    state.walletsHistory = data
   }
 }
 
@@ -85,6 +88,13 @@ export const actions = {
     await axios.get(state.apipath + 'wallets', { headers: authHeader() })
       .then(response => {
         commit('SET_WALLETS', response.data.data.walletUser)
+      }).catch(error => {
+      })
+  },
+  async get_wallets_history({ commit ,state},id) {
+    await axios.get(state.apipath + `wallets/history/${id}`, { headers: authHeader() })
+      .then(response => {
+        commit('SET_WALLET_HISTORY', response.data.data.result)
       }).catch(error => {
       })
   },

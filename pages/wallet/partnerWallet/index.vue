@@ -89,49 +89,55 @@
       <div class="col-sm-12">
         <div class="white-box">
           <form class="form-horizontal form-material">
-            <div class="row" style="padding: 0px 15px;">
-              <h3 class="box-title m-b-10">Search</h3>
-              <div class="col-md-6 text-left">
-                <div class="form-group">
-                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Partner</b></h4></label>
-                  <div class="col-md-10 col-sm-10">
-                    <select class="form-control">
-                      <option>-- Please choose partner --</option>
-                      <option v-for="partner in partners">
-                        {{ partner.contactName }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 text-left">
-                <div class="form-group">
-                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Update By</b></h4></label>
-                  <div class="col-md-10 col-sm-10">
-                    <select class="form-control">
-                      <option>-- Please choose employee --</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 text-left">
-                <div class="form-group">
-                  <label class="control-label col-md-2 col-sm-2"><h4><b>Start Date</b></h4></label>
-                  <div class="col-md-10">
-                    <input class="form-control" type="text" name="" placeholder="11/02/2020">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 text-left">
-                <div class="form-group">
-                  <label class="control-label col-md-2 col-sm-2"><h4><b>End Date</b></h4></label>
-                  <div class="col-md-10">
-                    <input class="form-control" type="text" name="" placeholder="11/02/2020">
-                  </div>
-                </div>
-              </div>
+            <div class="row" style="padding: 0px 20px 0px 20px;">
+              <input class="form-control " type="text" id="search_branch" v-model="searchQuery"
+                     placeholder="Input text for searching ( Code , Name , Contact , Tel .)">
             </div>
           </form>
+<!--          <form class="form-horizontal form-material">-->
+<!--            <div class="row" style="padding: 0px 15px;">-->
+<!--              <h3 class="box-title m-b-10">Search</h3>-->
+<!--              <div class="col-md-6 text-left">-->
+<!--                <div class="form-group">-->
+<!--                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Partner</b></h4></label>-->
+<!--                  <div class="col-md-10 col-sm-10">-->
+<!--                    <select class="form-control">-->
+<!--                      <option>&#45;&#45; Please choose partner &#45;&#45;</option>-->
+<!--                      <option v-for="partner in partners">-->
+<!--                        {{ partner.contactName }}-->
+<!--                      </option>-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-6 text-left">-->
+<!--                <div class="form-group">-->
+<!--                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Update By</b></h4></label>-->
+<!--                  <div class="col-md-10 col-sm-10">-->
+<!--                    <select class="form-control">-->
+<!--                      <option>&#45;&#45; Please choose employee &#45;&#45;</option>-->
+<!--                    </select>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-6 text-left">-->
+<!--                <div class="form-group">-->
+<!--                  <label class="control-label col-md-2 col-sm-2"><h4><b>Start Date</b></h4></label>-->
+<!--                  <div class="col-md-10">-->
+<!--                    <input class="form-control" type="text" name="" placeholder="11/02/2020">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-6 text-left">-->
+<!--                <div class="form-group">-->
+<!--                  <label class="control-label col-md-2 col-sm-2"><h4><b>End Date</b></h4></label>-->
+<!--                  <div class="col-md-10">-->
+<!--                    <input class="form-control" type="text" name="" placeholder="11/02/2020">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </form>-->
 
           <div class="table-responsive">
             <table id="myTable" class="table table-striped">
@@ -148,18 +154,31 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="pw in queriedData">
+              <tr v-for="pw in queriedData" v-if="searchQuery === ''" >
                 <td class="text-center">{{ pw.id }}</td>
                 <td class="text-center">{{ pw.walletId }}</td>
                 <td><p v-if="pw.Partner">{{ pw.Partner.partnerName }}</p></td>
                 <td class="text-right">{{ toCurrencyString(pw.amount) }}</td>
-                <td class="text-center">01-01-2020</td>
+                <td class="text-center">{{ pw.updatedAt }}</td>
                 <td class="text-center"><span class="label label-success">Active</span></td>
                 <td class="">Administrator</td>
                 <td class="text-center">
-
-                  &nbsp;&nbsp;<a href="topupwallet.html" class="cursor-pointer mdi mdi-coin text-dark"></a>
-                  &nbsp;&nbsp;<a class="cursor-pointer ti-pencil-alt text-dark"></a>
+                  <nuxt-link :to="{ path: `/wallet/partnerWallet/${pw.walletId}`}"
+                             class="cursor-pointer ti-time text-dark"></nuxt-link>
+                  &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
+                </td>
+              </tr>
+              <tr v-for="pw in queriedData" v-if="searchQuery !== ''" >
+                <td class="text-center">{{ pw.item.id }}</td>
+                <td class="text-center">{{ pw.item.walletId }}</td>
+                <td><p v-if="pw.item.Partner">{{ pw.item.Partner.partnerName }}</p></td>
+                <td class="text-right">{{ toCurrencyString(pw.item.amount) }}</td>
+                <td class="text-center">{{ pw.item.updatedAt }}</td>
+                <td class="text-center"><span class="label label-success">Active</span></td>
+                <td class="">Administrator</td>
+                <td class="text-center">
+                  <nuxt-link :to="{ path: `/wallet/partnerWallet/${pw.item.walletId}`}"
+                             class="cursor-pointer ti-time text-dark"></nuxt-link>
                   &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
                 </td>
               </tr>
@@ -213,7 +232,7 @@ export default {
       searchedData: [],
       searchQuery: '',
       fuseSearch: null,
-      searchProps: ["date", "action", 'description', 'user'],
+      searchProps: ["walletId","Partner.partnerName"],
       pagination: {
         perPage: 10,
         currentPage: 1,
@@ -230,6 +249,7 @@ export default {
       let result = this.tableData;
       if (this.searchedData.length > 0 || this.searchQuery.length > 0) {
         result = this.searchedData;
+        console.log(result)
       }
       return result.slice(this.from, this.to);
     },
@@ -298,6 +318,18 @@ export default {
   },
   async mounted() {
   }, watch: {
+    searchQuery(value) {
+      let result = this.tableData;
+      console.log(result)
+      if (value !== '') {
+        this.fuseSearch = new Fuse(this.tableData, {
+          keys: this.searchProps,
+          threshold: 0.0
+        });
+        result = this.fuseSearch.search(this.searchQuery);
+      }
+      this.searchedData = result;
+    },
     partnerSelect(val){
       console.log(val)
      this.walletData.partnerId = val.id

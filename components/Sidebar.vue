@@ -31,7 +31,7 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/partner" class="waves-effect t2" v-bind:class="{ 'active': $nuxt.$route.name == 'partner' }">
+          <NuxtLink to="/partner" class="waves-effect t2" v-bind:class="{ 'active': $nuxt.$route.name == 'partner' || $nuxt.$route.name === 'partner-add' }">
             <i class="las la-users-cog"></i>
             <span class="hide-menu">Partner</span>
           </NuxtLink>
@@ -40,14 +40,14 @@
           <a
             class="waves-effect"
             @click="walletexpand = !walletexpand"
-            v-bind:class="{ 'active': $nuxt.$route.name == 'wallet-partner-wallet' || $nuxt.$route.name == 'wallet-transfer' }">
+            v-bind:class="{ 'active': $nuxt.$route.name == 'wallet-partnerWallet' || $nuxt.$route.name == 'wallet-transfer' || $nuxt.$route.name === 'wallet-partnerWallet-id' }">
             <i class="ti-wallet fa-fw" data-icon="v"></i>
             <span class="hide-menu"> Wallet <span class="fa arrow"></span> </span>
           </a>
           <transition name="fade">
             <ul class="nav nav-second-level" v-if="walletexpand">
               <li>
-                <NuxtLink to="/wallet/partner-wallet">
+                <NuxtLink to="/wallet/partnerWallet">
                   <i class="icon-wallet fa-fw"></i>
                   <span class="hide-menu">Partner Wallet</span>
                 </NuxtLink>
