@@ -3,7 +3,9 @@ const webpack = require('webpack')
 export default {
   //mode: 'universal',
   server :{
-    port: 3000 ||  process.env.PORT,
+    port: process.env.PORT || 3000 ,
+    host: '0.0.0.0', // default: localhost,
+    timing: false
   },
   loader: 'less-loader',
   options: { math: { 'parens-division': true, } },
