@@ -10,9 +10,10 @@
               <div class="form-group">
                 <label class="control-label col-md-4">Partner Name<font style="color:red">*</font></label>
                 <div class="col-md-8">
-                  <select class="form-control"  v-model="partnersData">
-                    <option>-- Please choose partner --</option>
-                    <option v-for="partner in this.$nuxt.$store.state.partners"  v-bind:value="partner">
+                  <select class="form-control" v-model="partnersData">
+                    <option value="">-- Please choose partner --</option>
+                    <option v-for="partner in this.$nuxt.$store.state.partners" v-bind:value="partner"
+                            value="partner.contactName">
                       {{ partner.contactName }}
                     </option>
                   </select>
@@ -21,13 +22,14 @@
               <div class="form-group">
                 <label class="control-label col-md-4">Wallet ID</label>
                 <div class="col-md-8">
-                  <input class="form-control" type="text" v-model="walletData.walletId" readonly placeholder="WDxxxxxxxxxxxxxxx">
+                  <input class="form-control" type="text" v-model="walletData.walletId" readonly
+                         placeholder="WDxxxxxxxxxxxxxxx">
                 </div>
               </div>
               <div class="form-group">
                 <label class="control-label col-md-4">Wallet Amount</label>
                 <div class="col-md-8">
-                  <input class="form-control" type="text" v-model="walletData.amount" placeholder="0.00">
+                  <input class="form-control" ref="amt" type="number" v-model="walletData.amount" placeholder="0.00">
                 </div>
               </div>
               <div class="form-group" v-show="false">
@@ -94,51 +96,6 @@
                      placeholder="Input text for searching ( Code , Name , Contact , Tel .)">
             </div>
           </form>
-<!--          <form class="form-horizontal form-material">-->
-<!--            <div class="row" style="padding: 0px 15px;">-->
-<!--              <h3 class="box-title m-b-10">Search</h3>-->
-<!--              <div class="col-md-6 text-left">-->
-<!--                <div class="form-group">-->
-<!--                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Partner</b></h4></label>-->
-<!--                  <div class="col-md-10 col-sm-10">-->
-<!--                    <select class="form-control">-->
-<!--                      <option>&#45;&#45; Please choose partner &#45;&#45;</option>-->
-<!--                      <option v-for="partner in partners">-->
-<!--                        {{ partner.contactName }}-->
-<!--                      </option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="col-md-6 text-left">-->
-<!--                <div class="form-group">-->
-<!--                  <label class="control-label col-md-2 col-sm-2"><h4 class="m-b-0 m-t-0"><b>Update By</b></h4></label>-->
-<!--                  <div class="col-md-10 col-sm-10">-->
-<!--                    <select class="form-control">-->
-<!--                      <option>&#45;&#45; Please choose employee &#45;&#45;</option>-->
-<!--                    </select>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="col-md-6 text-left">-->
-<!--                <div class="form-group">-->
-<!--                  <label class="control-label col-md-2 col-sm-2"><h4><b>Start Date</b></h4></label>-->
-<!--                  <div class="col-md-10">-->
-<!--                    <input class="form-control" type="text" name="" placeholder="11/02/2020">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="col-md-6 text-left">-->
-<!--                <div class="form-group">-->
-<!--                  <label class="control-label col-md-2 col-sm-2"><h4><b>End Date</b></h4></label>-->
-<!--                  <div class="col-md-10">-->
-<!--                    <input class="form-control" type="text" name="" placeholder="11/02/2020">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </form>-->
-
           <div class="table-responsive">
             <table id="myTable" class="table table-striped">
               <thead>
@@ -154,7 +111,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="pw in queriedData" v-if="searchQuery === ''" >
+              <tr v-for="pw in queriedData" v-if="searchQuery === ''">
                 <td class="text-center">{{ pw.id }}</td>
                 <td class="text-center">{{ pw.walletId }}</td>
                 <td><p v-if="pw.Partner">{{ pw.Partner.partnerName }}</p></td>
@@ -165,10 +122,9 @@
                 <td class="text-center">
                   <nuxt-link :to="{ path: `/wallet/partnerWallet/${pw.walletId}`}"
                              class="cursor-pointer ti-time text-dark"></nuxt-link>
-                  &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
                 </td>
               </tr>
-              <tr v-for="pw in queriedData" v-if="searchQuery !== ''" >
+              <tr v-for="pw in queriedData" v-if="searchQuery !== ''">
                 <td class="text-center">{{ pw.item.id }}</td>
                 <td class="text-center">{{ pw.item.walletId }}</td>
                 <td><p v-if="pw.item.Partner">{{ pw.item.Partner.partnerName }}</p></td>
@@ -179,7 +135,6 @@
                 <td class="text-center">
                   <nuxt-link :to="{ path: `/wallet/partnerWallet/${pw.item.walletId}`}"
                              class="cursor-pointer ti-time text-dark"></nuxt-link>
-                  &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
                 </td>
               </tr>
               </tbody>
@@ -222,7 +177,7 @@ export default {
       partnerselect: '',
       addmodal: false,
       partnerwallets: [],
-      partnersData:null,
+      partnersData: '',
       walletData: {
         partnerId: "",
         walletId: "",
@@ -232,7 +187,7 @@ export default {
       searchedData: [],
       searchQuery: '',
       fuseSearch: null,
-      searchProps: ["walletId","Partner.partnerName"],
+      searchProps: ["walletId", "Partner.partnerName"],
       pagination: {
         perPage: 10,
         currentPage: 1,
@@ -274,7 +229,7 @@ export default {
     wallets() {
       return this.$nuxt.$store.state.wallets
     },
-    partnerSelect(){
+    partnerSelect() {
       return this.partnersData
     }
   },
@@ -288,36 +243,47 @@ export default {
       console.log(event.target.value)
     },
     async onAddWallet() {
+      if(this.walletData.amount === '' || this.walletData.amount === null){
+        this.$nuxt.$store.commit('SET_ALERT', {
+          text: 'Amount can\'t be null',
+          type: 'error'
+        })
+        this.$refs.amt.focus()
+        return false
+      }
       await axios({
         method: 'POST',
-        url: this.$nuxt.$store.state.apipath+'wallets',
+        url: this.$nuxt.$store.state.apipath + 'wallets',
         headers: authHeader(),
         data: this.walletData
       }).then(response => {
-        if(response.data.type === "success") {
-          this.$nuxt.$store.commit('SET_ALERT',{
+        if (response.data.type === "success") {
+          this.$nuxt.$store.commit('SET_ALERT', {
             text: 'Topup Success !!',
             type: 'success'
           })
-          this.addmodal =false
+          this.addmodal = false
           this.$nuxt.$store.dispatch('get_wallets')
         } else {
-          this.$nuxt.$store.commit('SET_ALERT',{
+          this.$nuxt.$store.commit('SET_ALERT', {
             text: 'Fail to Topup',
             type: 'error'
           })
         }
       }).catch(err => {
         console.log(err.response.data.message);
-        this.$nuxt.$store.commit('SET_ALERT',{
+        this.$nuxt.$store.commit('SET_ALERT', {
           text: err.response.data.message,
           type: 'error'
         })
       })
+      this.partnersData = ''
+      this.walletData.amount =''
     }
   },
   async mounted() {
-  }, watch: {
+  },
+  watch: {
     searchQuery(value) {
       let result = this.tableData;
       console.log(result)
@@ -330,12 +296,12 @@ export default {
       }
       this.searchedData = result;
     },
-    partnerSelect(val){
+    partnerSelect(val) {
       console.log(val)
-     this.walletData.partnerId = val.id
-      if(val.Wallet) {
+      this.walletData.partnerId = val.id
+      if (val.Wallet) {
         this.walletData.walletId = val.Wallet.walletId
-      }else{
+      } else {
         this.walletData.walletId = ''
       }
     },

@@ -62,7 +62,7 @@
                 <td>{{ partner.country }}</td>
                 <td>{{ partner.contactName }}</td>
                 <td class="text-center">{{ partner.tel }}</td>
-                <td class="text-center">{{ partner.updatedAt }}</td>
+                <td class="text-center">{{ partner.joinDate | formatDate }}</td>
                 <td class="text-center">
                   &nbsp;&nbsp;
                   <nuxt-link :to="{ name: 'partner-id', params: { id: partner.id }}"
@@ -79,7 +79,7 @@
                 <td>{{ partner.item.country }}</td>
                 <td>{{ partner.item.contactName }}</td>
                 <td class="text-center">{{ partner.item.tel }}</td>
-                <td class="text-center">{{ partner.item.updatedAt }}</td>
+                <td class="text-center">{{ partner.item.joinDate | formatDate}}</td>
                 <td class="text-center">
                   &nbsp;&nbsp;
                   <nuxt-link :to="{ name: 'partner-id', params: { id: partner.item.id }}"
@@ -120,7 +120,8 @@
 import axios from 'axios'
 import {authHeader} from "@/helper/auth-header";
 import Fuse from 'fuse.js';
-import { BasePagination } from "@/components/BasePagination";
+import BasePagination from "@/components/BasePagination";
+import moment from "moment";
 
 export default {
   components: {
@@ -132,48 +133,13 @@ export default {
       searchedData: [],
       searchQuery: '',
       fuseSearch: null,
-      searchProps:["code","partnerName",'contactName','tel'],
+      searchProps: ["code", "partnerName", 'contactName', 'tel'],
       pagination: {
-        perPage: 10,
+        perPage: 20,
         currentPage: 1,
         perPageOptions: [5, 10, 25, 50],
         total: 0
       },
-      tableColumns: [
-        {
-          prop: 'id',
-          label: 'Seq',
-          minWidth: 200
-        }, {
-          prop: 'code',
-          label: 'Code',
-          minWidth: 200
-        }, {
-          prop: 'partnerName',
-          label: 'Name',
-          minWidth: 200
-        },
-        {
-          prop: 'country',
-          label: 'Country',
-          minWidth: 200
-        },
-        {
-          prop: 'contactName',
-          label: 'Contact',
-          minWidth: 200
-        },
-        {
-          prop: 'tel',
-          label: 'Tel',
-          minWidth: 200
-        },
-        {
-          prop: 'updatedAt',
-          label: 'Join Date',
-          minWidth: 200
-        },
-      ],
     }
   },
   created() {
@@ -209,21 +175,33 @@ export default {
   },
   methods: {
     async onDelete(id, email, username) {
-      await axios({
-        method: 'DELETE',
-        url: this.$nuxt.$store.state.apipath + 'partners/' + id,
-        headers: authHeader()
-      }).then(response => {
-        this.$nuxt.$store.commit('SET_ALERT', {
-          text: 'Delete Partner Successful',
-          type: 'correct'
-        })
-        this.$nuxt.$store.dispatch('get_partners')
-      }).catch(err => {
-        this.$nuxt.$store.commit('SET_ALERT', {
-          text: `Delete Partner Failed (${err.response.data.message})`,
-          type: 'error'
-        })
+      this.$swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            method: 'DELETE',
+            url: this.$nuxt.$store.state.apipath + 'partners/' + id,
+            headers: authHeader()
+          }).then(response => {
+            this.$nuxt.$store.commit('SET_ALERT', {
+              text: 'Delete Partner Successful',
+              type: 'correct'
+            })
+            this.$nuxt.$store.dispatch('get_partners')
+          }).catch(err => {
+            this.$nuxt.$store.commit('SET_ALERT', {
+              text: `Delete Partner Failed (${err.response.data.message})`,
+              type: 'error'
+            })
+          })
+        }
       })
     }
   },
@@ -245,7 +223,7 @@ export default {
   },
   mounted() {
     // Fuse search initialization.
-    console.log("MTDATA",this.tableData)
+    console.log("MTDATA", this.tableData)
 
   }
 }

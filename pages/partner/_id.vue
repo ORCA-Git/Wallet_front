@@ -62,7 +62,11 @@
                                   <div class="col-md-8">
                                       <select class="form-control" v-model="createData.country">
                                           <option>-- Please choose country --</option>
-                                          <option>Thailand</option>
+                                        <option value="">-- Please choose country --</option>
+                                        <option value="Thailand">Thailand</option>
+                                        <option value="Singapore">Singapore</option>
+                                        <option value="Malaysia">Malaysia</option>
+                                        <option value="Indonesia">Indonesia</option>
                                       </select>
                                   </div>
                               </div>

@@ -74,6 +74,18 @@
                   <div id="ct-visits" style="height: 405px;"></div>
               </div>
           </div>
+          <div class="col-md-6 col-md-6 col-sm-6">
+            <div class="sk-chat-widgets">
+                <div class="panel panel-blue">
+                   <div class="panel-heading">
+                     TRANSACTION YEARLY TRANSFER
+                   </div>
+                   <div class="panel-body">
+                     <chart-line :data="barChartData" :options="barChartOptions" :height="200" />
+                   </div>
+                </div>
+            </div>
+          </div>
           <div class="col-lg-6 col-md-6 col-sm-6">
               <div class="panel">
                   <div class="sk-chat-widgets">
@@ -131,7 +143,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <tr v-for="transfer in transfers">
+                              <tr v-for="transfer,index in transfers">
                                   <td>{{ index + 1 }}</td>
                                   <td class="txt-oflo">{{ getPartnerName(transfer.from_partner) }}</td>
                                   <td><span class="label label-success label-rouded">Approved</span> </td>
@@ -284,7 +296,70 @@
   export default {
     data () {
       return {
+        barChartData: {
+          labels: [
+            '2019-06',
+            '2019-07',
+            '2019-08',
+            '2019-09',
+            '2019-10',
+            '2019-11',
+            '2019-12',
+            '2020-01',
+            '2020-02',
+            '2020-03',
+            '2020-04',
+            '2020-05'
+          ],
+          datasets: [
+            {
+              label: 'Visits',
+              data: [10, 15, 20, 30, 40, 50, 60, 70, 34, 45, 11, 78, 45],
+              backgroundColor: '#83d275'
+            },
+            {
+              label: 'Pages Views',
+              data: [30, 24, 57, 23, 68, 72, 25, 64, 133, 143, 165, 33, 56],
+              backgroundColor: '#5ae086'
+            }
+          ]
+        },barChartOptions: {
+          responsive: true,
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Transaction Analytics Data',
+            fontSize: 24,
+            fontColor: '#6b7280'
+          },
+          tooltips: {
+            backgroundColor: '#17BF62'
+          },
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  display: false
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true
+                },
+                gridLines: {
+                  display: false
+                }
+              }
+            ]
+          }
+        }
       }
+    },
+    mounted() {
     },
     computed: {
       partners () {

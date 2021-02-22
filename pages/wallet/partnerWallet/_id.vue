@@ -16,19 +16,19 @@
                 <div class="form-group">
                   <label class="control-label col-md-4">Partner Code</label>
                   <div class="col-md-8">
-                    <input ref="partnerCode" class="form-control" type="text" readonly v-model="createData.partnerCode">
+                    <input ref="partnerCode" class="form-control" type="text" disabled v-model="createData.partnerCode">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-4">Contact Name </label>
                   <div class="col-md-8">
-                    <input class="form-control" type="text" readonly v-model="createData.contactName">
+                    <input class="form-control" type="text" disabled v-model="createData.contactName">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-4">WalletID </label>
                   <div class="col-md-8">
-                    <input class="form-control" type="text" readonly v-model="createData.walletId">
+                    <input class="form-control" type="text" disabled v-model="createData.walletId">
                   </div>
                 </div>
               </div>
@@ -36,19 +36,19 @@
                 <div class="form-group">
                   <label class="control-label col-md-4">Partner Name</label>
                   <div class="col-md-8">
-                    <input ref="partnerName" class="form-control" type="text" v-model="createData.partnerName">
+                    <input ref="partnerName" class="form-control" type="text" disabled v-model="createData.partnerName">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-4">Tel</label>
                   <div class="col-md-8">
-                    <input class="form-control" type="text" v-model="createData.tel">
+                    <input class="form-control" type="text" disabled v-model="createData.tel">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="control-label col-md-4">Wallet Amount</label>
                   <div class="col-md-8">
-                    <input class="form-control" type="text" v-model="createData.walletAmount">
+                    <input class="form-control" type="text" disabled v-model="createData.walletAmount">
                   </div>
                 </div>
               </div>
@@ -62,6 +62,7 @@
                 <tr>
                   <th class="text-center">Seq</th>
                   <th class="text-center">Date</th>
+                  <th class="text-center">Type</th>
                   <th class="text-right">Amount</th>
                   <th class="text-center">Topup By</th>
                 </tr>
@@ -70,13 +71,15 @@
                 <tr v-for="pw in queriedData" v-if="searchQuery === ''">
                   <td class="text-center">{{ pw.id }}</td>
                   <td class="text-center">{{ pw.createdDate }}</td>
+                  <td class="text-center">{{ pw.typeData}}</td>
                   <td class="text-right">{{ pw.amount }}</td>
                   <td class="text-center"><p v-if="pw.User">{{ pw.User.employeeCode }}</p></td>
                 </tr>
                 <tr v-for="pw in queriedData" v-if="searchQuery !== ''">
-                  <td class="text-center">{{ pw.id }}</td>
-                  <td class="text-center">{{ pw.cretedDate }}</td>
-                  <td class="text-right">{{ pw.amount }}</td>
+                  <td class="text-center">{{ pw.item.id }}</td>
+                  <td class="text-center">{{ pw.item.cretedDate }}</td>
+                  <td class="text-center">{{ pw.item.typeData}}</td>
+                  <td class="text-right">{{ pw.item.amount }}</td>
                   <td class="text-center"><p v-if="pw.User">{{ pw.User.employeeCode }}</p></td>
                 </tr>
                 </tbody>

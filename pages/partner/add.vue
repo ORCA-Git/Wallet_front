@@ -62,11 +62,11 @@
                                   <label class="control-label col-md-4">Country </label>
                                   <div class="col-md-8">
                                       <select class="form-control" v-model="createData.country">
-                                          <option>-- Please choose country --</option>
-                                          <option>Thailand</option>
-                                          <option>Singapore</option>
-                                          <option>Malaysia</option>
-                                          <option>Indonesia</option>
+                                          <option value="">-- Please choose country --</option>
+                                          <option value="Thailand">Thailand</option>
+                                          <option value="Singapore">Singapore</option>
+                                          <option value="Malaysia">Malaysia</option>
+                                          <option value="Indonesia">Indonesia</option>
                                       </select>
                                   </div>
                               </div>
@@ -188,8 +188,8 @@
                 email: "",
                 tel: "",
                 country: "",
-                joinDate: "",
-                expireDate: "",
+                joinDate: new Date(),
+                expireDate: null,
                 address: "",
                 remark: "",
                 walletAmount: "",
@@ -204,7 +204,13 @@
               }
           }
       },
-      computed: {
+      created() {
+        let oneYearFromNow = new Date();
+        oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+        this.createData.expireDate = oneYearFromNow
+      },
+    computed: {
+
 
       },
       methods: {

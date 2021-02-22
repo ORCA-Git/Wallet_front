@@ -10,10 +10,12 @@ export const state = () => ({
   //apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
   bearer: '',
   expandsidebar: true,
+  users:[],
   partners: [],
   userlogin: [],
   transfers: [],
   wallets: [],
+  walletId:"",
   walletsHistory: [],
   activities: [],
   token: "",
@@ -53,10 +55,15 @@ export const mutations = {
   SET_PARTNERS (state, data) {
     state.partners = data
   },
+  SET_USERS (state, data) {
+    state.users = data
+  },
   SET_TRANSFERS (state, data) {
     state.transfers = data
-  }
-  ,
+  },
+  SET_WALLET_ID(state,data){
+    state.walletId = data
+  },
   SET_WALLETS (state, data) {
     state.wallets = data
   },
@@ -70,6 +77,13 @@ export const mutations = {
 
 
 export const actions = {
+  async get_users({ commit, state }) {
+    await axios.get(state.apipath + 'users', { headers: authHeader() })
+      .then(response => {
+        commit('SET_USERS', response.data.data.result)
+      }).catch(error => {
+      })
+  },
   async get_partners({ commit, state }) {
     await axios.get(state.apipath + 'partners', { headers: authHeader() })
       .then(response => {
@@ -88,6 +102,14 @@ export const actions = {
     await axios.get(state.apipath + 'wallets', { headers: authHeader() })
       .then(response => {
         commit('SET_WALLETS', response.data.data.walletUser)
+      }).catch(error => {
+      })
+  },
+  async get_wallets_by_id({ commit, state },walletId) {
+    await axios.get(state.apipath + 'wallets/'+walletId, { headers: authHeader() })
+      .then(response => {
+        console.log("WALLETID",response)
+        commit('SET_WALLETS_ID', response.data.data.walletUser)
       }).catch(error => {
       })
   },

@@ -41,10 +41,9 @@
                       <div class="form-group">
                         <label class="control-label col-md-4">Partner Code <span style="color: red">*</span></label>
                         <div class="col-md-8">
-                          <select ref="partnerCode" class="form-control" v-model="partnerData">
+                          <select ref="partnerCode" class="form-control" v-model="createData.partnerCode">
                             <option value="">-- Please choose partner --</option>
-                            <option v-for="partner in this.$nuxt.$store.state.partners"
-                                    v-bind:value="partner"
+                            <option v-for="partner in this.$nuxt.$store.state.partners" v-bind:value="partner.code"
                                     value="partner.code">
                               {{ partner.code }}
                             </option>
@@ -223,7 +222,7 @@
                 </div>
                 <div class="wizard-pane">
                   <h3 class="box-title">Upload Slip Transfer To Customer</h3>
-                  <vue-dropify v-model="createData.slip"></vue-dropify>
+                  <img :src="'data:image.jpeg;base64,' + imageAsBase64" alt="Logo" class="img img-responsive">
                 </div>
               </div>
             </div>
@@ -233,10 +232,6 @@
         <hr>
         <br>
         <div class="col-12" align="center">
-          <button class="btn btn-info btn-lg" type="button" @click="saveData">
-            <span class="btn-label"><i class=" ti-save"></i></span>
-            &nbsp;&nbsp;Save &nbsp;&nbsp;
-          </button>
           <NuxtLink to="/wallet/transfer" class="btn btn-default btn-lg">
             <span class="btn-label"><i class="t ti-arrow-left"></i></span>
             &nbsp;&nbsp;Back&nbsp;&nbsp;
@@ -258,7 +253,8 @@ export default {
   },
   data() {
     return {
-      partnerData:null,
+      paramId: this.$route.params.id,
+      imageAsBase64: '',
       createData: {
         partnerId:"",
         walletID:'',
@@ -266,7 +262,9 @@ export default {
         amount: 0,
         slip: null,
         partnerCode: "",
+        bankName: "",
         bsbNumber: "",
+        accountNo: "",
         order_no: "",
         invoice: "",
         transaction_date: new Date(),
@@ -279,8 +277,6 @@ export default {
         submitted: "",
         sms: "",
         coupon: "",
-        customer_bank:"",
-        customer_account:"",
         customer_id: "",
         customer_tel: "",
         customer_subdistrict: "",
@@ -294,23 +290,55 @@ export default {
     }
   },
   computed:{
-    partnerSelect() {
-      return this.partnerData
+    walletID() {
+      return this.$nuxt.$store.state.walletId
     }
+  },
+  async mounted() {
+    await axios.get(this.$nuxt.$store.state.apipath + 'transfers/' + this.paramId,
+      {headers: authHeader()})
+      .then(response => {
+        const val = response.data.data.result
+        console.log(val)
+        if(val.Wallet){
+          this.createData.walletID = val.Wallet.walletId
+          this.createData.balance = val.Wallet.amount
+        }
+        this.imageAsBase64 = response.data.data.image.slip
+        this.createData.slip = val.slip
+        this.createData.partnerCode = val.from_partner;
+        this.createData.bankName = val.customer_bank
+        this.createData.bsbNumber = val.bsbNumber
+        this.createData.accountNo = val.customer_account
+        this.createData.order_no = val.order_no
+        this.createData.invoice = val.invoice
+        this.createData.transaction_date = new Date(val.transaction_date)
+        this.createData.rate = val.rate
+        this.createData.fee = val.fee
+        this.createData.receipt_date = new Date(val.receipt_date)
+        this.createData.to_customer = val.to_customer
+        this.createData.from_partner = val.from_partner
+        this.createData.reason = val.reason
+        this.createData.submitted = val.submitted
+        this.createData.sms = val.sms
+        this.createData.coupon = val.coupon
+        this.createData.customer_id = val.customer_id
+        this.createData.customer_tel = val.customer_tel
+        this.createData.customer_subdistrict = val.customer_subdistrict
+        this.createData.customer_country = val.customer_country
+        this.createData.customer_postcode = val.customer_postcode
+        this.createData.customer_name = val.customer_name
+        this.createData.customer_address = val.customer_address
+        this.createData.customer_state = val.customer_state
+        this.createData.customer_remark = val.customer_remark
+        this.createData.customer_remark = val.customer_remark
+      }).catch(error => {
+      })
   },
   methods: {
     validate() {
       if (this.createData.partnerCode === "" || this.createData.partnerCode === null) {
         this.$refs.partnerCode.focus()
-        return false
-      }
-      if (this.createData.walletID === "" || this.createData.walletID === null) {
-        this.$swal.fire('No Wallet Data')
-        this.$refs.partnerCode.focus()
-        return false
-      }
-      if (this.createData.amount === "" || this.createData.receipt_date === null) {
-        this.$refs.amount.focus()
         return false
       }
       if (this.createData.rate === "" || this.createData.rate === null) {
@@ -327,11 +355,6 @@ export default {
       }
       if (this.createData.receipt_date === "" || this.createData.receipt_date === null) {
         this.$refs.receiptDate.focus()
-        return false
-      }
-      if (this.createData.balance < this.createData.amount ) {
-        this.$refs.amount.focus()
-        this.$swal.fire('Insufficient Balance')
         return false
       }
 
@@ -374,16 +397,9 @@ export default {
   }
   ,
   watch: {
-    partnerSelect(val) {
-      this.createData.partnerCode = val.code
-      this.createData.partnerId = val.id
-      if (val.Wallet) {
-        this.createData.walletID = val.Wallet.walletId
-        this.createData.balance = val.Wallet.amount
-      } else {
-        this.createData.walletID = ''
-      }
-    },
+    walletID(val){
+      this.createData.walletID = val
+    }
   }
 }
 </script>

@@ -50,14 +50,15 @@ export default {
   ],
   plugins: [
     { src: './plugins/jquery.min.js', ssr: false },
-    { src: '~/plugins/vue-datepicker', ssr: false }
+    { src: '~/plugins/vue-datepicker', ssr: false },
+    { src: '~/plugins/vue-chart.js', ssr: false },
+    { src: '~/plugins/vue-moment.js', ssr: false },
   ],
   components: true,
   buildModules: [
     '@nuxtjs/style-resources'
   ],
-  modules: [
-  ],
+  modules: ['vue-sweetalert2/nuxt'],
   styleResources: {
     less: [
     ]

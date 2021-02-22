@@ -62,7 +62,7 @@
           </transition>
         </li>
         <li>
-          <NuxtLink to="/users" class="waves-effect" v-show="false">
+          <NuxtLink to="/users" class="waves-effect" v-show="true">
             <i class="icon-user fa-fw"></i>
             <span class="hide-menu">User</span>
           </NuxtLink>
