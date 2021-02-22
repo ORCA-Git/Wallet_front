@@ -277,6 +277,8 @@ export default {
         submitted: "",
         sms: "",
         coupon: "",
+        customer_bank:"",
+        customer_account: "",
         customer_id: "",
         customer_tel: "",
         customer_subdistrict: "",
@@ -307,9 +309,9 @@ export default {
         this.imageAsBase64 = response.data.data.image.slip
         this.createData.slip = val.slip
         this.createData.partnerCode = val.from_partner;
-        this.createData.bankName = val.customer_bank
+        this.createData.customer_bank = val.customer_bank
         this.createData.bsbNumber = val.bsbNumber
-        this.createData.accountNo = val.customer_account
+        this.createData.customer_account = val.customer_account
         this.createData.order_no = val.order_no
         this.createData.invoice = val.invoice
         this.createData.transaction_date = new Date(val.transaction_date)
@@ -319,7 +321,7 @@ export default {
         this.createData.to_customer = val.to_customer
         this.createData.from_partner = val.from_partner
         this.createData.reason = val.reason
-        this.createData.submitted = val.submitted
+        this.createData.submitted = val.submited
         this.createData.sms = val.sms
         this.createData.coupon = val.coupon
         this.createData.customer_id = val.customer_id
