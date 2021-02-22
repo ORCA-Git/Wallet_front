@@ -33,8 +33,9 @@
                 <th>Partner Name</th>
                 <th>Customer Name</th>
                 <th class="text-right">Amount</th>
-                <th class="">Update By</th>
-                <th class="text-center">Action</th>
+                <th class="text-center">STATUS</th>
+                <th class="text-center">Update By</th>
+                <th class="text-right">Action</th>
               </tr>
               </thead>
               <tbody>
@@ -42,28 +43,38 @@
                 <td class="text-center">{{ index + 1 }}</td>
                 <td class="text-center">{{ transfer.order_no }}</td>
                 <td class="text-center">{{ transfer.transaction_date | formatDate }}</td>
-                <td><div v-if="transfer.Partner">{{transfer.Partner.partnerName}}</div></td>
+                <td>
+                  <div v-if="transfer.Partner">{{ transfer.Partner.partnerName }}</div>
+                </td>
                 <td>{{ transfer.customer_name }}</td>
                 <td class="text-right">{{ toCurrencyString(transfer.amount) }}</td>
-                <td class="">Administrator</td>
                 <td class="text-center">
+                  <span v-if="transfer.status==='APPROVED'"  class="label label-success">Approved</span>
+                  <span v-if="transfer.status==='CANCEL'"  class="label label-danger">Cancel</span>
+                </td>
+                <td class="">Administrator</td>
+                <td class="text-right">
                   <nuxt-link :to="{ path: `/wallet/transfer/${transfer.id}`}"
                              class="cursor-pointer ti-eye"></nuxt-link>
-                  &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
+                  &nbsp;&nbsp;<a v-if="transfer.status==='APPROVED'" class="cursor-pointer ti-trash text-dark"
+                                 @click="onDelete(transfer.id)"></a>
                 </td>
               </tr>
               <tr v-for="transfer,index in queriedData" v-if="searchQuery !== ''">
                 <td class="text-center">{{ index + 1 }}</td>
                 <td class="text-center">{{ transfer.item.order_no }}</td>
                 <td class="text-center">{{ transfer.item.transaction_date | formatDate }}</td>
-                <td><div v-if="transfer.item.Partner">{{transfer.item.Partner.partnerName}}</div></td>
+                <td>
+                  <div v-if="transfer.item.Partner">{{ transfer.item.Partner.partnerName }}</div>
+                </td>
                 <td>{{ transfer.item.customer_name }}</td>
                 <td class="text-right">{{ toCurrencyString(transfer.item.amount) }}</td>
                 <td class="">Administrator</td>
                 <td class="text-center">
                   <nuxt-link :to="{ path: `/wallet/transfer/${transfer.item.id}`}"
                              class="cursor-pointer ti-eye"></nuxt-link>
-                  &nbsp;&nbsp;<a class="cursor-pointer ti-trash text-dark"></a>
+                  &nbsp;<a class="cursor-pointer ti-trash text-dark"
+                           @click="onDelete(transfer.item.id)"></a>
                 </td>
               </tr>
               </tbody>
@@ -79,6 +90,7 @@
 <script>
 import axios from 'axios'
 import Fuse from "fuse.js";
+import {authHeader} from "@/helper/auth-header";
 
 export default {
   data() {
@@ -88,7 +100,7 @@ export default {
       searchedData: [],
       searchQuery: '',
       fuseSearch: null,
-      searchProps: ["id", "Partner.partnerName","order_no"],
+      searchProps: ["id", "Partner.partnerName", "order_no"],
       pagination: {
         perPage: 20,
         currentPage: 1,
@@ -130,11 +142,38 @@ export default {
     },
   },
   methods: {
-    toTransactionID(str){
-      return "T"+String(str).padStart(5, '0')
+    async onDelete(id, email, username) {
+      this.$swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel this transaction !'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            method: 'DELETE',
+            url: this.$nuxt.$store.state.apipath + 'transfers/' + id,
+            headers: authHeader()
+          }).then(response => {
+            this.$nuxt.$store.commit('SET_ALERT', {
+              text: 'Cancel Transaction Successful',
+              type: 'correct'
+            })
+            this.$nuxt.$store.dispatch('get_transfers')
+          }).catch(err => {
+            this.$nuxt.$store.commit('SET_ALERT', {
+              text: `Delete Transaction Failed (${err.response.data.message})`,
+              type: 'error'
+            })
+          })
+        }
+      })
     },
     toCurrencyString(number) {
-      if(number) {
+      if (number) {
         return number.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
       }
       //return number.toLocaleString('en-US', {maximumFractionDigits:2})
@@ -149,8 +188,9 @@ export default {
       }
       return partner
     }
-  },
-  watch:{
+  }
+  ,
+  watch: {
     searchQuery(value) {
       let result = this.tableData;
       console.log(result)
@@ -162,7 +202,8 @@ export default {
         result = this.fuseSearch.search(this.searchQuery);
       }
       this.searchedData = result;
-    },
+    }
+    ,
     transfers(val) {
       this.tableData = val
     }

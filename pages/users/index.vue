@@ -37,33 +37,31 @@
               <tr v-for="user in queriedData" v-if="searchQuery === ''">
                 <td class="text-center">{{ user.id }}</td>
                 <td class="text-center">{{ user.employeeCode }}</td>
-                <td>{{ user.employeeName }}</td>
-                <td>Administrator</td>
+                <td class="text-center">{{ user.employeeName }}</td>
+                <td class="text-center">{{ user.Role }}</td>
                 <td class="text-center">{{ user.tel }}</td>
                 <td class="text-center">
                   &nbsp;&nbsp;
-                  <nuxt-link :to="{ name: 'user-id', params: { id: user.id }}"
+                  <nuxt-link :to="{ name: 'users-id', params: { id: user.id }}"
                              class="cursor-pointer ti-pencil-alt text-dark"></nuxt-link>
                   &nbsp;&nbsp;
                   <a class="cursor-pointer ti-trash text-dark"
-                     @click="onDelete(partner.id, partner.email, partner.username)"></a>
+                     @click="onDelete(user.id)"></a>
                 </td>
               </tr>
-              <tr v-for="partner in queriedData" v-if="searchQuery !== ''">
-                <td class="text-center">{{ partner.item.id }}</td>
-                <td class="text-center">{{ partner.item.code }}</td>
-                <td>{{ partner.item.partnerName }}</td>
-                <td>{{ partner.item.country }}</td>
-                <td>{{ partner.item.contactName }}</td>
-                <td class="text-center">{{ partner.item.tel }}</td>
-                <td class="text-center">{{ partner.item.updatedAt }}</td>
+              <tr v-for="user in queriedData" v-if="searchQuery !== ''">
+                <td class="text-center">{{ user.item.id }}</td>
+                <td class="text-center">{{ user.item.employeeCode }}</td>
+                <td class="text-center">{{ user.item.employeeName }}</td>
+                <td class="text-center">{{ user.item.Role }}</td>
+                <td class="text-center">{{ user.item.tel }}</td>
                 <td class="text-center">
                   &nbsp;&nbsp;
-                  <nuxt-link :to="{ name: 'partner-id', params: { id: partner.item.id }}"
+                  <nuxt-link :to="{ name: 'users-id', params: { id: user.item.id }}"
                              class="cursor-pointer ti-pencil-alt text-dark"></nuxt-link>
                   &nbsp;&nbsp;
                   <a class="cursor-pointer ti-trash text-dark"
-                     @click="onDelete(partner.item.id, partner.item.email, partner.item.username)"></a>
+                     @click="onDelete(user.item.id)"></a>
                 </td>
               </tr>
               </tbody>
@@ -109,7 +107,7 @@ export default {
       searchedData: [],
       searchQuery: '',
       fuseSearch: null,
-      searchProps: ["code", "partnerName", 'contactName', 'tel'],
+      searchProps: ["employeeCode", "employeeName", 'tel'],
       pagination: {
         perPage: 10,
         currentPage: 1,
@@ -150,7 +148,7 @@ export default {
     }
   },
   methods: {
-    async onDelete(id, email, username) {
+    async onDelete(id) {
       this.$swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -167,13 +165,13 @@ export default {
             headers: authHeader()
           }).then(response => {
             this.$nuxt.$store.commit('SET_ALERT', {
-              text: 'Delete Partner Successful',
+              text: 'Delete User Successful',
               type: 'correct'
             })
-            this.$nuxt.$store.dispatch('get_partners')
+            this.$nuxt.$store.dispatch('get_users')
           }).catch(err => {
             this.$nuxt.$store.commit('SET_ALERT', {
-              text: `Delete Partner Failed (${err.response.data.message})`,
+              text: `Delete User Failed (${err.response.data.message})`,
               type: 'error'
             })
           })
