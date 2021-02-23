@@ -116,7 +116,7 @@
                       <div class="form-group">
                         <label class="control-label col-md-4">Amount <span style="color:red;">*</span></label>
                         <div class="col-md-8">
-                          <input ref="amount" class="form-control" type="text" name="" v-model="createData.amount">
+                          <input ref="amount" class="form-control" type="number" name="" v-model="createData.amount">
                         </div>
                       </div>
                       <div class="form-group">
@@ -322,6 +322,7 @@ export default {
         this.createData.from_partner = val.from_partner
         this.createData.reason = val.reason
         this.createData.submitted = val.submited
+        this.createData.amount = val.amount
         this.createData.sms = val.sms
         this.createData.coupon = val.coupon
         this.createData.customer_id = val.customer_id

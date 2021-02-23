@@ -13,8 +13,8 @@
                   <select class="form-control" v-model="partnersData">
                     <option value="">-- Please choose partner --</option>
                     <option v-for="partner in this.$nuxt.$store.state.partners" v-bind:value="partner"
-                            value="partner.contactName">
-                      {{ partner.contactName }}
+                            value="partner.partnerName">
+                      {{ partner.partnerName }}
                     </option>
                   </select>
                 </div>
