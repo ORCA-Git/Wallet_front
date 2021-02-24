@@ -70,14 +70,14 @@
                 <tbody>
                 <tr v-for="pw in queriedData" v-if="searchQuery === ''">
                   <td class="text-center">{{ pw.id }}</td>
-                  <td class="text-center">{{ pw.createdDate }}</td>
+                  <td class="text-center">{{ pw.createdDate | formatDate }}</td>
                   <td class="text-center">{{ pw.typeData}}</td>
                   <td class="text-right">{{ pw.amount }}</td>
                   <td class="text-center"><p v-if="pw.User">{{ pw.User.employeeCode }}</p></td>
                 </tr>
                 <tr v-for="pw in queriedData" v-if="searchQuery !== ''">
                   <td class="text-center">{{ pw.item.id }}</td>
-                  <td class="text-center">{{ pw.item.cretedDate }}</td>
+                  <td class="text-center">{{ pw.item.cretedDate | formatDate }}</td>
                   <td class="text-center">{{ pw.item.typeData}}</td>
                   <td class="text-right">{{ pw.item.amount }}</td>
                   <td class="text-center"><p v-if="pw.User">{{ pw.User.employeeCode }}</p></td>

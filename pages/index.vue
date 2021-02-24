@@ -29,7 +29,7 @@
                       </li>
                       <li class="text-right">
                         <i class="ti-arrow-up text-purple"></i>
-                        <span class="counter text-purple">{{ wallets }}.00</span>
+                        <span class="counter text-purple">{{ wallets }}</span>
                       </li>
                   </ul>
               </div>
@@ -42,7 +42,7 @@
                           <div id="sparklinedash3"></div>
                       </li>
                       <li class="text-right"><i class="ti-arrow-up text-info"></i>
-                        <span class="counter text-info">{{ transfersCount }}.00</span>
+                        <span class="counter text-info">{{ transfersCount }}</span>
                       </li>
                   </ul>
               </div>
@@ -81,7 +81,7 @@
                      TRANSACTION YEARLY TRANSFER
                    </div>
                    <div class="panel-body">
-                     <chart-line :data="barChartData" :options="barChartOptions" :height="200" />
+                     <chart-line :data="barChartData" :options="barChartOptions" :height="235" />
                    </div>
                 </div>
             </div>
@@ -89,9 +89,9 @@
           <div class="col-lg-6 col-md-6 col-sm-6">
               <div class="panel">
                   <div class="sk-chat-widgets">
-                      <div class="panel panel-default">
+                      <div class="panel panel-blue">
                           <div class="panel-heading">
-                              Partner Listing
+                              Recent Partner
                           </div>
                           <div class="panel-body">
                               <ul class="chatonline">
@@ -110,7 +110,7 @@
                   </div>
               </div>
           </div>
-          <div class="col-md-6 col-lg-6 col-sm-6">
+          <div class="col-lg-12 col-md-12 col-sm-12">
               <div class="white-box">
                   <div class="col-md-3 col-sm-4 col-xs-6 pull-right" v-show="false">
                       <select class="form-control pull-right row b-none">
@@ -122,13 +122,13 @@
                       </select>
                   </div>
                   <h3 class="box-title">Recent Transfer</h3>
-                  <div class="row sales-report" v-show="false">
+                  <div class="row sales-report">
                       <div class="col-md-6 col-sm-6 col-xs-6">
-                          <h2>March 2020</h2>
-                          <p>Transfer Report</p>
+                          <h2>Transfer Report</h2>
+                          <p>Summary  </p>
                       </div>
                       <div class="col-md-6 col-sm-6 col-xs-6 ">
-                          <h1 class="text-right text-info m-t-20">120,690.00</h1>
+                          <h1 class="text-right text-info m-t-20">{{ transfersCount }}</h1>
                       </div>
                   </div>
                   <div class="table-responsive">
@@ -143,10 +143,13 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <tr v-for="transfer,index in transfers">
+                              <tr v-for="(transfer,index) in transfers">
                                   <td>{{ index + 1 }}</td>
-                                  <td class="txt-oflo">{{ getPartnerName(transfer.from_partner) }}</td>
-                                  <td><span class="label label-success label-rouded">Approved</span> </td>
+                                  <td class="txt-oflo">{{ transfer.from_partner }}</td>
+                                  <td>
+                                    <span v-if="transfer.status==='APPROVED'"  class="label label-success">Approved</span>
+                                    <span v-if="transfer.status==='CANCEL'"  class="label label-danger">Cancel</span>
+                                  </td>
                                   <td class="txt-oflo">{{ transfer.updatedAt }}</td>
                                   <td><span class="text-success">{{ transfer.fee }}.00</span></td>
                               </tr>
@@ -313,14 +316,8 @@
           ],
           datasets: [
             {
-              label: 'Visits',
+              label: 'Transaction',
               data: [10, 15, 20, 30, 40, 50, 60, 70, 34, 45, 11, 78, 45],
-              backgroundColor: '#83d275'
-            },
-            {
-              label: 'Pages Views',
-              data: [30, 24, 57, 23, 68, 72, 25, 64, 133, 143, 165, 33, 56],
-              backgroundColor: '#5ae086'
             }
           ]
         },barChartOptions: {
@@ -331,7 +328,7 @@
           title: {
             display: true,
             text: 'Transaction Analytics Data',
-            fontSize: 24,
+            fontSize: 46,
             fontColor: '#6b7280'
           },
           tooltips: {
@@ -360,6 +357,12 @@
       }
     },
     mounted() {
+      let payload = {
+        page :1,
+        limit:5
+      }
+      this.$nuxt.$store.dispatch('get_partners_page',payload)
+      this.$nuxt.$store.dispatch('get_transfers_page',payload)
     },
     computed: {
       partners () {
@@ -370,11 +373,11 @@
       },
       transfersCount () {
         let transfers = this.$nuxt.$store.state.transfers
-        let fee = 0;
+        let amount = 0;
         for (var i = 0; i < transfers.length; i++) {
-          fee = fee + transfers[i].fee
+          amount = amount + transfers[i].amount
         }
-        return fee
+        return this.toCurrencyString(amount)
       },
       transfers () {
         return this.$nuxt.$store.state.transfers
@@ -387,10 +390,15 @@
             fee = fee + wallets[i].amount
           }
         }
-        return fee
+        return this.toCurrencyString(fee)
       }
     },
     methods: {
+      toCurrencyString(number) {
+        if (number) {
+          return number.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        }
+      },
       getPartnerName (id) {
         let partners = this.$nuxt.$store.state.partners
         let partner = "";
