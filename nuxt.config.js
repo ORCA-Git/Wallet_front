@@ -78,5 +78,8 @@ export default {
         '$': 'jquery'
       })
     ]
+  },
+  generate: {
+    dir: 'build/dist'
   }
 }

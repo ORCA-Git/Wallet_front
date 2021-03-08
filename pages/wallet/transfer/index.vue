@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row bg-title">
       <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-        <h3 class="box-title m-b-10">Transfer List222</h3>
+        <h3 class="box-title m-b-10">Transfer List</h3>
       </div>
       <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <NuxtLink to="/wallet/transfer/add"
