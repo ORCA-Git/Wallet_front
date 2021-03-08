@@ -128,7 +128,7 @@
                           <p>Summary  </p>
                       </div>
                       <div class="col-md-6 col-sm-6 col-xs-6 ">
-                          <h1 class="text-right text-info m-t-20">{{ transfersCount }}</h1>
+                          <h1 class="text-right text-info m-t-20">{{ transfersSummary }}</h1>
                       </div>
                   </div>
                   <div class="table-responsive">
@@ -150,7 +150,7 @@
                                     <span v-if="transfer.status==='APPROVED'"  class="label label-success">Approved</span>
                                     <span v-if="transfer.status==='CANCEL'"  class="label label-danger">Cancel</span>
                                   </td>
-                                  <td class="txt-oflo">{{ transfer.updatedAt }}</td>
+                                  <td class="txt-oflo">{{ transfer.transaction_date | formatDate }}</td>
                                   <td><span class="text-success">{{ transfer.fee }}.00</span></td>
                               </tr>
                           </tbody>
@@ -328,7 +328,7 @@
           title: {
             display: true,
             text: 'Transaction Analytics Data',
-            fontSize: 46,
+            fontSize: 20,
             fontColor: '#6b7280'
           },
           tooltips: {
@@ -361,15 +361,22 @@
         page :1,
         limit:5
       }
+      this.$nuxt.$store.dispatch('get_partners')
       this.$nuxt.$store.dispatch('get_partners_page',payload)
+      this.$nuxt.$store.dispatch('get_transfers')
       this.$nuxt.$store.dispatch('get_transfers_page',payload)
+      this.$nuxt.$store.dispatch('get_wallets',payload)
+
     },
     computed: {
       partners () {
-        return this.$nuxt.$store.state.partners
+        return this.$nuxt.$store.state.partners_page
       },
       partnerCount () {
         return this.$nuxt.$store.state.partners.length
+      },
+      graphData(){
+
       },
       transfersCount () {
         let transfers = this.$nuxt.$store.state.transfers
@@ -377,20 +384,22 @@
         for (var i = 0; i < transfers.length; i++) {
           amount = amount + transfers[i].amount
         }
+        return transfers.length
+      },
+      transfersSummary () {
+        let transfers = this.$nuxt.$store.state.transfers
+        let amount = 0;
+        for (let i = 0; i < transfers.length; i++) {
+          amount = amount + transfers[i].amount
+        }
         return this.toCurrencyString(amount)
       },
       transfers () {
-        return this.$nuxt.$store.state.transfers
+        return this.$nuxt.$store.state.transfers_page
       },
       wallets () {
         let wallets = this.$nuxt.$store.state.wallets
-        let fee = 0;
-        if (wallets) {
-          for (let i = 0; i < wallets.length; i++) {
-            fee = fee + wallets[i].amount
-          }
-        }
-        return this.toCurrencyString(fee)
+        return wallets.length
       }
     },
     methods: {
@@ -403,7 +412,7 @@
         let partners = this.$nuxt.$store.state.partners
         let partner = "";
         for (var i = 0; i < partners.length; i++) {
-          if (partners[i].id == id) {
+          if (partners[i].id === id) {
             partner = partners[i].partnerName
           }
         }

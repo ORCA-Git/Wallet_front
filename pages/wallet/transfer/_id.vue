@@ -222,7 +222,10 @@
                 </div>
                 <div class="wizard-pane">
                   <h3 class="box-title">Upload Slip Transfer To Customer</h3>
-                  <img :src="'data:image.jpeg;base64,' + imageAsBase64" alt="Logo" class="img img-responsive">
+                  <div v-for="imageBase64 in ImagesData" class="m-b-5">
+                    <img  :src="'data:image.jpeg;base64,' + imageBase64" alt="Logo" class="img img-responsive">
+                  </div>
+                  <h3 v-if="ImagesData.length <= 0">No Image</h3>
                 </div>
               </div>
             </div>
@@ -254,7 +257,7 @@ export default {
   data() {
     return {
       paramId: this.$route.params.id,
-      imageAsBase64: '',
+      ImagesData:[],
       createData: {
         partnerId:"",
         walletID:'',
@@ -306,7 +309,10 @@ export default {
           this.createData.walletID = val.Wallet.walletId
           this.createData.balance = val.Wallet.amount
         }
-        this.imageAsBase64 = response.data.data.image.slip
+        if(response.data.data.image.length >0 ) {
+          console.log(response.data.data.image)
+          this.ImagesData = response.data.data.image
+        }
         this.createData.slip = val.slip
         this.createData.partnerCode = val.from_partner;
         this.createData.customer_bank = val.customer_bank

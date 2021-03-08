@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row bg-title">
       <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-        <h3 class="box-title m-b-10">Transfer Lsit</h3>
+        <h3 class="box-title m-b-10">Transfer List222</h3>
       </div>
       <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <NuxtLink to="/wallet/transfer/add"
@@ -79,11 +79,26 @@
               </tr>
               </tbody>
             </table>
+            <div class="col-md-12">
+              <div class="col-md-6">
+                <p class="pagination">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <div class="col-md-6">
+                <div class="pull-right">
+                  <base-pagination
+                    v-model="pagination.currentPage"
+                    :per-page="pagination.perPage"
+                    :total="total">
+                  </base-pagination>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -182,7 +197,7 @@ export default {
       let partners = this.$nuxt.$store.state.partners
       let partner = "";
       for (var i = 0; i < partners.length; i++) {
-        if (partners[i].id == id) {
+        if (partners[i].id === id) {
           partner = partners[i]
         }
       }

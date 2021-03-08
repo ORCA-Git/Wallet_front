@@ -221,9 +221,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="wizard-pane">
+                <div class="wizard-pane file upload">
                   <h3 class="box-title">Upload Slip Transfer To Customer</h3>
-                  <vue-dropify v-model="createData.slip"></vue-dropify>
+                  <button type="button" class="btn btn-success m-b-5" v-on:click="AddFile">ADD</button>
+<!--                  <vue-dropify v-model="fileU" :multiple="multiUpload" data="1" accept="image/*" @change="viewFile"></vue-dropify>-->
+                  <div v-for="(input, index) in fileU" class="m-b-5">
+                    <vue-dropify v-model="createData.slip[input]" accept="image/*"/>
+<!--                    <input type="file" class="form-control" v-model="this"></input>-->
+                  </div>
                 </div>
               </div>
             </div>
@@ -259,12 +264,17 @@ export default {
   data() {
     return {
       partnerData:null,
+      multiUpload:true,
+      fileU:[],
+      FileUploadForm: [
+        { template: "<div></div>"}
+      ],
       createData: {
         partnerId:"",
         walletID:'',
         balance:0,
         amount: 0,
-        slip: null,
+        slip: [],
         partnerCode: "",
         bsbNumber: "",
         order_no: "",
@@ -293,12 +303,18 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.dispatch('get_partners')
+  },
   computed:{
     partnerSelect() {
       return this.partnerData
     }
   },
   methods: {
+    AddFile(){
+      this.fileU.push(this.fileU.length+1)
+    },
     validate() {
       if (this.createData.partnerCode === "" || this.createData.partnerCode === null) {
         this.$refs.partnerCode.focus()
@@ -342,9 +358,15 @@ export default {
         return false
       }
       let formData = new FormData();
+
       formData.append("data", JSON.stringify(this.createData))
-      if (this.createData.slip !== null || this.createData.slip) {
-        formData.append("slip", this.createData.slip[0])
+      if (this.createData.slip.length >0) {
+        for (let i = 1; i < this.createData.slip.length; i++) {
+          if(this.createData.slip[i] !== 'undefined') {
+            console.log(this.createData.slip[i][0])
+            formData.append("slip", this.createData.slip[i][0])
+          }
+        }
       } else {
         formData.append("slip", null)
       }

@@ -158,7 +158,10 @@
             <div class="col-12" align="center">
               <button class="btn btn-info btn-lg" type="button" @click="onSave">
                 <span class="btn-label" ><i class=" ti-save"></i></span>&nbsp;&nbsp;Save Change&nbsp;&nbsp;</button>&nbsp;&nbsp;
-              <a href="partner.html" class="btn btn-default btn-lg"><span class="btn-label"><i class="t ti-arrow-left"></i></span>&nbsp;&nbsp;Back&nbsp;&nbsp;</a>
+              <NuxtLink to="/users" class="btn btn-default btn-lg">
+                <span class="btn-label"><i class="t ti-arrow-left"></i></span>
+                &nbsp;&nbsp;Back&nbsp;&nbsp;
+              </NuxtLink>
             </div>
             <br>
           </form>

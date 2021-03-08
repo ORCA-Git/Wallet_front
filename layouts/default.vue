@@ -55,7 +55,13 @@ export default {
 
   .fullpage-wrapper {
     position: relative;
-    padding-top: 60px;
+    margin-top: 70px;
+  }
+  @media (max-width: 780px) {
+    .fullpage-wrapper {
+      position: relative;
+      margin-top: 0px;
+    }
   }
 
   .middle-item {

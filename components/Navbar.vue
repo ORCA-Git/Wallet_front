@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-default navbar-static-top m-b-0" style="background-color: #2cabe3 !important; position: fixed; z-index: 15000;">
+    <nav class="native-nave navbar navbar-default navbar-static-top m-b-0">
         <div class="navbar-header" style="background-color: #2cabe3 !important;">
             <div class="top-left-part">
                 <!-- Logo -->
@@ -74,7 +74,23 @@ export default {
 </script>
 
 <style lang="less">
+
     @import "~/assets/less/variables.less";
     @import "~/assets/less/common.less";
     @import "~/assets/less/sidebar-nav.less";
+    .native-nave {
+      background-color: #2cabe3 !important; position: fixed; z-index: 15000;
+    }
+
+    @media (max-width: 1204px) {
+      .native-nave {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .native-nave {
+        width: 375px;
+      }
+    }
 </style>

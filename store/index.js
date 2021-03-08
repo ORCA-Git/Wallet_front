@@ -12,8 +12,10 @@ export const state = () => ({
   expandsidebar: true,
   users: [],
   partners: [],
+  partners_page:[],
   userlogin: [],
   transfers: [],
+  transfers_page:[],
   wallets: [],
   walletId: "",
   walletsHistory: [],
@@ -55,11 +57,17 @@ export const mutations = {
   SET_PARTNERS(state, data) {
     state.partners = data
   },
+  SET_PARTNERS_PAGE(state, data) {
+    state.partners_page = data
+  },
   SET_USERS(state, data) {
     state.users = data
   },
   SET_TRANSFERS(state, data) {
     state.transfers = data
+  },
+  SET_TRANSFERS_PAGE(state, data) {
+    state.transfers_page = data
   },
   SET_WALLET_ID(state, data) {
     state.walletId = data
@@ -102,7 +110,7 @@ export const actions = {
     }
     await axios.get(state.apipath + 'partners?page=' + perPage+'&limit='+limitPerPage, {headers: authHeader()})
       .then(response => {
-        commit('SET_PARTNERS', response.data.data.result)
+        commit('SET_PARTNERS_PAGE', response.data.data.result)
       }).catch(error => {
       })
   },
@@ -124,7 +132,7 @@ export const actions = {
     }
     await axios.get(state.apipath + 'transfers?page=' + perPage+'&limit='+limitPerPage, {headers: authHeader()})
       .then(response => {
-        commit('SET_TRANSFERS', response.data.data.result)
+        commit('SET_TRANSFERS_PAGE', response.data.data.result)
       }).catch(error => {
       })
   },

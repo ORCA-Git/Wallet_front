@@ -8085,7 +8085,7 @@ ul.select-row-icon {
 
 .fa-level-down:before {
     content: "\f149";
-    
+
 }
 
 .fa-check-square:before {
@@ -19025,7 +19025,7 @@ ul.pro-amenities {
     .sidebar {
         z-index: 1001;
         position: fixed;
-        width: 0;
+        width: auto;
         padding-top: 0;
         height: 100%
     }
