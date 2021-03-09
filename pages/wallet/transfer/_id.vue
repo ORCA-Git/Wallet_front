@@ -310,7 +310,6 @@ export default {
           this.createData.balance = val.Wallet.amount
         }
         if(response.data.data.image.length >0 ) {
-          console.log(response.data.data.image)
           this.ImagesData = response.data.data.image
         }
         this.createData.slip = val.slip

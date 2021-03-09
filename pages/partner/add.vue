@@ -156,9 +156,14 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-md-2">Upload Document</label>
+                  <label class="control-label col-md-2">Upload File</label>
                   <div class="col-md-10">
-                    <vue-dropify v-model="createData.document" accept="image/*"/>
+                    <button type="button" class="btn btn-success m-b-5" v-on:click="AddFile">ADD</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div v-for="input in fileU" class="m-b-5">
+                    <vue-dropify v-model="createData.document[input]" accept="image/*"/>
                   </div>
                 </div>
               </div>
@@ -197,6 +202,7 @@ export default {
     return {
       partners: [],
       errors: [],
+      fileU:[],
       createData: {
         partnerCode: "",
         partnerName: "",
@@ -217,7 +223,7 @@ export default {
         username: "",
         password: "",
         secretKey: "",
-        document: null,
+        document: [],
       }
     }
   },
@@ -228,6 +234,9 @@ export default {
   },
   computed: {},
   methods: {
+    AddFile(){
+      this.fileU.push(this.fileU.length+1)
+    },
     validate() {
       this.errors = [];
       if (!this.createData.partnerCode) {
@@ -284,8 +293,14 @@ export default {
       }
       let formData = new FormData();
       formData.append("data", JSON.stringify(this.createData))
-      if (this.createData.document != null || this.createData.document !== '') {
-        formData.append("document",this.createData.document[0])
+      if (this.createData.document.length > 0) {
+        for (let i = 1; i < this.createData.document.length; i++) {
+          if(this.createData.document[i] !== 'undefined') {
+            formData.append("document", this.createData.document[i][0])
+          }
+        }
+      } else {
+        formData.append("document", null)
       }
       await axios({
         method: 'POST',

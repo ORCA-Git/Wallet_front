@@ -224,10 +224,8 @@
                 <div class="wizard-pane file upload">
                   <h3 class="box-title">Upload Slip Transfer To Customer</h3>
                   <button type="button" class="btn btn-success m-b-5" v-on:click="AddFile">ADD</button>
-<!--                  <vue-dropify v-model="fileU" :multiple="multiUpload" data="1" accept="image/*" @change="viewFile"></vue-dropify>-->
                   <div v-for="(input, index) in fileU" class="m-b-5">
                     <vue-dropify v-model="createData.slip[input]" accept="image/*"/>
-<!--                    <input type="file" class="form-control" v-model="this"></input>-->
                   </div>
                 </div>
               </div>

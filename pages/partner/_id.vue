@@ -158,16 +158,23 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-md-2">Upload Document</label>
+                  <label class="control-label col-md-2">Upload File</label>
                   <div class="col-md-10">
-                    <vue-dropify v-model="createData.document" accept="image/*"/>
+                    <button type="button" class="btn btn-success m-b-5" v-on:click="AddFile">ADD</button>
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-md-2">&nbsp;</div>
-                  <div v-if="imageBase64 !== null" class="col-md-10">
-                    <img  :src="'data:image.jpeg;base64,' + imageBase64" alt="Logo" class="img img-responsive">
+                  <div v-for="input in fileU" class="m-b-5">
+                    <vue-dropify v-model="createData.document[input]" accept="image/*"/>
                   </div>
+                </div>
+                <div class="form-group" v-for="item in ImagesData">
+                  <div class="col-md-2">&nbsp;</div>
+                  <div class="col-md-10 m-b-5">
+                    <img :src="'data:image.jpeg;base64,' + item.image" alt="Logo" class="img img-responsive">
+                    <a class="cursor-pointer ti-trash text-dark remove-icon" v-on:click="RemoveFile(item.id)"></a>
+                  </div>
+                  <h3 v-if="ImagesData.length <= 0">No Image</h3>
                 </div>
               </div>
             </div>
@@ -203,8 +210,10 @@ export default {
   },
   data() {
     return {
-      imageBase64:"",
+      imageBase64: "",
       partners: [],
+      ImagesData: [],
+      fileU: [],
       paramId: this.$route.params.id,
       createData: {
         partnerCode: "",
@@ -226,43 +235,74 @@ export default {
         username: "",
         password: "",
         secretKey: "",
-        document: null,
+        document: [],
       }
     }
   },
   computed: {},
   async mounted() {
-    await axios.get(this.$nuxt.$store.state.apipath + 'partners/' + this.paramId,
-      {headers: authHeader()})
-      .then(response => {
-        this.createData.partnerCode = response.data.data.partner.code
-        this.createData.partnerName = response.data.data.partner.partnerName
-        this.createData.contactName = response.data.data.partner.contactName
-        this.createData.email = response.data.data.partner.email
-        this.createData.tel = response.data.data.partner.tel
-        this.createData.country = response.data.data.partner.country
-        this.createData.joinDate = new Date(response.data.data.partner.joinDate)
-        this.createData.expireDate = new Date(response.data.data.partner.expireDate)
-        this.createData.Address = response.data.data.partner.uAddress
-        this.createData.remark = response.data.data.partner.remark
-        this.createData.walletAmount = response.data.data.wallet.amount
-        this.createData.walletId = response.data.data.wallet.walletId
-        this.createData.minAmtTransaction = response.data.data.wallet.minTransaction
-        this.createData.maxAmtTransaction = response.data.data.wallet.maxTransaction
-        this.createData.limitTransaction = response.data.data.wallet.limitTransactionPerDay
-        this.createData.fee = response.data.data.wallet.fee
-        this.createData.remark = response.data.data.wallet.remark
-        this.createData.username = response.data.data.partner.username
-        this.createData.password = response.data.data.partner.password
-        this.createData.secretKey = response.data.data.partner.secretKey
-        console.log(response.data.data.image)
-        if(response.data.data.image) {
-          this.imageBase64 = response.data.data.image.image
-        }
-      }).catch(error => {
-      })
+   await this.getPartner()
   },
   methods: {
+    async getPartner(){
+      await axios.get(this.$nuxt.$store.state.apipath + 'partners/' + this.paramId,
+        {headers: authHeader()})
+        .then(response => {
+          this.createData.partnerCode = response.data.data.partner.code
+          this.createData.partnerName = response.data.data.partner.partnerName
+          this.createData.contactName = response.data.data.partner.contactName
+          this.createData.email = response.data.data.partner.email
+          this.createData.tel = response.data.data.partner.tel
+          this.createData.country = response.data.data.partner.country
+          this.createData.joinDate = new Date(response.data.data.partner.joinDate)
+          this.createData.expireDate = new Date(response.data.data.partner.expireDate)
+          this.createData.Address = response.data.data.partner.uAddress
+          this.createData.remark = response.data.data.partner.remark
+          this.createData.walletAmount = response.data.data.wallet.amount
+          this.createData.walletId = response.data.data.wallet.walletId
+          this.createData.minAmtTransaction = response.data.data.wallet.minTransaction
+          this.createData.maxAmtTransaction = response.data.data.wallet.maxTransaction
+          this.createData.limitTransaction = response.data.data.wallet.limitTransactionPerDay
+          this.createData.fee = response.data.data.wallet.fee
+          this.createData.remark = response.data.data.wallet.remark
+          this.createData.username = response.data.data.partner.username
+          this.createData.password = response.data.data.partner.password
+          this.createData.secretKey = response.data.data.partner.secretKey
+          if (response.data.data.image.length > 0) {
+            this.ImagesData = response.data.data.image
+          }
+        }).catch(error => {
+        })
+    },
+    async RemoveFile(id){
+      await axios({
+        method: 'DELETE',
+        url: this.$nuxt.$store.state.apipath + 'partners/file/' + id,
+        headers: authHeader(),
+      }).then(response => {
+        if (response.data.type === "success") {
+          this.$nuxt.$store.commit('SET_ALERT', {
+            text: 'Remove Image Success',
+            type: 'success'
+          })
+          this.getPartner()
+        } else {
+          this.$nuxt.$store.commit('SET_ALERT', {
+            text: 'Add Partner Failed',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$nuxt.$store.commit('SET_ALERT', {
+          text: 'Add Partner Failed',
+          type: 'error'
+        })
+      })
+    },
+    AddFile() {
+      this.fileU.push(this.fileU.length + 1)
+    },
     validate() {
       this.errors = [];
       if (!this.createData.partnerCode) {
@@ -319,8 +359,14 @@ export default {
       }
       let formData = new FormData();
       formData.append("data", JSON.stringify(this.createData))
-      if (this.createData.document) {
-        formData.append("document", this.createData.document[0])
+      if (this.createData.document.length > 0) {
+        for (let i = 1; i < this.createData.document.length; i++) {
+          if (this.createData.document[i] !== 'undefined') {
+            formData.append("document", this.createData.document[i][0])
+          }
+        }
+      } else {
+        formData.append("document", null)
       }
       await axios({
         method: 'put',
@@ -348,3 +394,12 @@ export default {
   }
 }
 </script>
+<style>
+.remove-icon {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  font-size: 18px;
+  font-weight: bold
+}
+</style>
