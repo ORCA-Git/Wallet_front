@@ -268,6 +268,7 @@ export default {
           this.createData.username = response.data.data.partner.username
           this.createData.password = response.data.data.partner.password
           this.createData.secretKey = response.data.data.partner.secretKey
+          this.ImagesData = []
           if (response.data.data.image.length > 0) {
             this.ImagesData = response.data.data.image
           }

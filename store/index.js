@@ -6,8 +6,8 @@ export const state = () => ({
     loggedIn: false,
     user: null
   },
-  //apipath:'http://13.228.120.202:3000/api/v1/',
-  apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
+  apipath:'http://13.228.120.202:3000/api/v1/',
+  //apipath: 'http://localhost:9000/api/v1/',//'http://13.228.120.202:80/api/v1/',
   bearer: '',
   expandsidebar: true,
   users: [],

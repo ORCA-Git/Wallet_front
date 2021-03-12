@@ -17,11 +17,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-top-links navbar-right pull-right">
-                <li>
-                    <form role="search" class="app-search hidden-sm hidden-xs m-r-10">
-                        <input type="text" placeholder="Search..." class="form-control"> <a href=""><i class="fa fa-search"></i></a>
-                    </form>
-                </li>
+
                 <li class="dropdown">
                     <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img src="~/assets/images/users/default-avatar.png" alt="user-img" width="36" class="img-circle"><b class="hidden-xs">{{this.userName}}</b><span class="caret"></span> </a>
                     <ul class="dropdown-menu dropdown-user animated flipInY">
